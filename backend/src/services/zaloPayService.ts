@@ -152,7 +152,7 @@ export class ZaloPayService {
 
       console.log('ZaloPay response:', response.data);
 
-      const result: ZaloPayCreateOrderResponse = response.data;
+      const result: ZaloPayCreateOrderResponse = response.data as ZaloPayCreateOrderResponse;
 
       // Store app_trans_id for tracking
       (result as any).app_trans_id = appTransId;
@@ -194,15 +194,16 @@ export class ZaloPayService {
       console.log('ZaloPay query response:', response.data);
 
       // Handle sandbox specific responses
-      if (response.data.return_code === 2 && response.data.sub_return_code === -377) {
+      const responseData = response.data as any;
+      if (responseData.return_code === 2 && responseData.sub_return_code === -377) {
         console.log('⚠️ ZaloPay sandbox error -377: Transaction not executed in sandbox');
         return {
-          ...response.data,
+          ...responseData,
           sandbox_note: 'This is a sandbox environment error. In production, this would be a real payment status.'
-        };
+        } as ZaloPayQueryOrderResponse;
       }
 
-      return response.data;
+      return responseData as ZaloPayQueryOrderResponse;
     } catch (error: any) {
       console.error('ZaloPay query order error:', error.response?.data || error.message);
       throw new Error(`ZaloPay query failed: ${error.response?.data?.return_message || error.message}`);

@@ -28,7 +28,7 @@ const AdminAnalyticsPage: React.FC = () => {
   const router = useRouter();
   const { user, isAuthenticated } = useAuth();
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState('overview');
+  const [activeTab, setActiveTab] = useState<string>('overview');
   const [dateRange, setDateRange] = useState({
     startDate: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
     endDate: new Date().toISOString().split('T')[0]
@@ -58,7 +58,7 @@ const AdminAnalyticsPage: React.FC = () => {
         startDate: dateRange.startDate,
         endDate: dateRange.endDate,
         period,
-        type: activeTab
+        type: activeTab as any
       });
 
       if (!response || !response.analytics) {

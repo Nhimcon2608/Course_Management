@@ -23,6 +23,9 @@
     "test:connection": "ts-node -r tsconfig-paths/register scripts/testConnection.ts"
   },
   "dependencies": {
+    "@types/axios": "^0.9.36",
+    "@types/xlsx": "^0.0.35",
+    "axios": "^1.9.0",
     "bcryptjs": "^2.4.3",
     "cloudinary": "^1.41.0",
     "cookie-parser": "^1.4.7",
@@ -42,7 +45,8 @@
     "stripe": "^14.7.0",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.0",
-    "winston": "^3.17.0"
+    "winston": "^3.17.0",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",

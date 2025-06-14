@@ -65,7 +65,7 @@ certificateSchema.pre('save', async function(next) {
   if (!this.certificateNumber) {
     const year = new Date().getFullYear();
     const month = String(new Date().getMonth() + 1).padStart(2, '0');
-    const count = await this.constructor.countDocuments({
+    const count = await (this.constructor as any).countDocuments({
       issuedAt: {
         $gte: new Date(year, new Date().getMonth(), 1),
         $lt: new Date(year, new Date().getMonth() + 1, 1)

@@ -49,7 +49,7 @@ export const getCourseObjectId = async (identifier: string): Promise<mongoose.Ty
       isPublished: true, 
       status: 'published' 
     });
-    return course ? course._id : null;
+    return course ? new mongoose.Types.ObjectId(course._id) : null;
   } catch (error) {
     console.error('Error in getCourseObjectId:', error);
     return null;

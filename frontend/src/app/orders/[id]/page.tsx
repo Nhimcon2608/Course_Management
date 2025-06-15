@@ -25,7 +25,7 @@ import {
 export default function OrderDetailPage() {
   const router = useRouter();
   const params = useParams();
-  const orderId = params.id as string;
+  const orderId = params?.id as string;
 
   const { 
     currentOrder, 

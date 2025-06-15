@@ -29,7 +29,7 @@ import Link from 'next/link';
 const LessonsManagementPage: React.FC = () => {
   const router = useRouter();
   const params = useParams();
-  const courseId = params.id as string;
+  const courseId = params?.id as string;
   const { user, isAuthenticated, isLoading } = useAuth();
   const { initializeAuth } = useAuthActions();
   const [authChecked, setAuthChecked] = useState(false);

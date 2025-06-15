@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { useAuth } from '@/store/authStore';
+import { useAuth, useAuthActions } from '@/store/authStore';
 import {
   LayoutDashboard,
   Users,
@@ -30,7 +30,8 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
-  const { user, logout } = useAuth();
+  const { user } = useAuth();
+  const { logout } = useAuthActions();
 
   // Check if user is admin
   if (!user || user.role !== 'admin') {
@@ -49,43 +50,43 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
       name: 'User Management',
       href: '/admin/users',
       icon: Users,
-      current: pathname.startsWith('/admin/users')
+      current: pathname?.startsWith('/admin/users') || false
     },
     {
       name: 'Course Management',
       href: '/admin/courses',
       icon: BookOpen,
-      current: pathname.startsWith('/admin/courses')
+      current: pathname?.startsWith('/admin/courses') || false
     },
     {
       name: 'Categories',
       href: '/admin/categories',
       icon: Tag,
-      current: pathname.startsWith('/admin/categories')
+      current: pathname?.startsWith('/admin/categories') || false
     },
     {
       name: 'Order Management',
       href: '/admin/orders',
       icon: Package,
-      current: pathname.startsWith('/admin/orders')
+      current: pathname?.startsWith('/admin/orders') || false
     },
     {
       name: 'Analytics',
       href: '/admin/analytics',
       icon: BarChart3,
-      current: pathname.startsWith('/admin/analytics')
+      current: pathname?.startsWith('/admin/analytics') || false
     },
     {
       name: 'System Health',
       href: '/admin/system',
       icon: Shield,
-      current: pathname.startsWith('/admin/system')
+      current: pathname?.startsWith('/admin/system') || false
     },
     {
       name: 'Settings',
       href: '/admin/settings',
       icon: Settings,
-      current: pathname.startsWith('/admin/settings')
+      current: pathname?.startsWith('/admin/settings') || false
     }
   ];
 

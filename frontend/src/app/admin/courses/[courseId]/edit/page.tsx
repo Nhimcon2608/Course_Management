@@ -102,17 +102,17 @@ const EditCoursePage: React.FC = () => {
       return;
     }
 
-    if (params.courseId) {
+    if (params?.courseId) {
       fetchCourseData();
     }
-  }, [isAuthenticated, user, router, params.courseId]);
+  }, [isAuthenticated, user, router, params?.courseId]);
 
   const fetchCourseData = async () => {
     try {
       setInitialLoading(true);
       
       const [courseRes, categoriesRes, instructorsRes] = await Promise.all([
-        apiClient.get(`/courses/${params.courseId}`),
+        apiClient.get(`/courses/${params?.courseId}`),
         apiClient.get('/categories'),
         apiClient.get('/admin/users?role=instructor&limit=100')
       ]);
@@ -128,37 +128,37 @@ const EditCoursePage: React.FC = () => {
         return;
       }
 
-      setCourse(courseData);
+      setCourse(courseData as any);
       setFormData({
         ...courseData,
-        category: courseData.category?._id || '',
-        instructor: courseData.instructor?._id || ''
+        category: (courseData as any).category?._id || '',
+        instructor: (courseData as any).instructor?._id || ''
       });
 
       // Handle categories response - check multiple possible response structures
       let categoriesData = [];
-      if (categoriesRes?.data?.categories) {
-        categoriesData = categoriesRes.data.categories;
-      } else if (categoriesRes?.categories) {
-        categoriesData = categoriesRes.categories;
-      } else if (Array.isArray(categoriesRes?.data)) {
-        categoriesData = categoriesRes.data;
+      if ((categoriesRes as any)?.data?.categories) {
+        categoriesData = (categoriesRes as any).data.categories;
+      } else if ((categoriesRes as any)?.categories) {
+        categoriesData = (categoriesRes as any).categories;
+      } else if (Array.isArray((categoriesRes as any)?.data)) {
+        categoriesData = (categoriesRes as any).data;
       } else if (Array.isArray(categoriesRes)) {
-        categoriesData = categoriesRes;
+        categoriesData = categoriesRes as any;
       }
 
       setCategories(categoriesData);
 
       // Handle instructors response - check multiple possible response structures
       let instructorsData = [];
-      if (instructorsRes?.data?.users) {
-        instructorsData = instructorsRes.data.users;
-      } else if (instructorsRes?.users) {
-        instructorsData = instructorsRes.users;
-      } else if (Array.isArray(instructorsRes?.data)) {
-        instructorsData = instructorsRes.data;
+      if ((instructorsRes as any)?.data?.users) {
+        instructorsData = (instructorsRes as any).data.users;
+      } else if ((instructorsRes as any)?.users) {
+        instructorsData = (instructorsRes as any).users;
+      } else if (Array.isArray((instructorsRes as any)?.data)) {
+        instructorsData = (instructorsRes as any).data;
       } else if (Array.isArray(instructorsRes)) {
-        instructorsData = instructorsRes;
+        instructorsData = instructorsRes as any;
       }
 
       setInstructors(instructorsData);
@@ -198,7 +198,7 @@ const EditCoursePage: React.FC = () => {
 
     try {
       setLoading(true);
-      await apiClient.put(`/courses/${params.courseId}`, formData);
+      await apiClient.put(`/courses/${params?.courseId}`, formData);
       
       toast.success('Course updated successfully');
       router.push('/admin/courses');
@@ -213,7 +213,7 @@ const EditCoursePage: React.FC = () => {
   const handleDelete = async () => {
     try {
       setLoading(true);
-      await apiClient.delete(`/courses/${params.courseId}`);
+      await apiClient.delete(`/courses/${params?.courseId}`);
       
       toast.success('Course deleted successfully');
       router.push('/admin/courses');
@@ -231,7 +231,7 @@ const EditCoursePage: React.FC = () => {
     
     // Clear error when user starts typing
     if (errors[field]) {
-      setErrors(prev => ({ ...prev, [field]: '' }));
+      setErrors((prev: any) => ({ ...prev, [field]: '' }));
     }
   };
 
@@ -947,7 +947,7 @@ const EditCoursePage: React.FC = () => {
                     <span>Final Price:</span>
                     <span className="text-blue-600">
                       {formData.discountPrice || formData.price ?
-                        formatCurrency(formData.discountPrice || formData.price) : 'Not set'}
+                        formatCurrency((formData.discountPrice || formData.price) as number) : 'Not set'}
                     </span>
                   </div>
                 </div>

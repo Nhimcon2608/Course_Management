@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { toast } from 'react-hot-toast';
-import { useAuthStore } from '@/store/authStore';
+import { useAuthStore, useAuthActions } from '@/store/authStore';
 import { 
   Mail, 
   Edit, 
@@ -20,7 +20,8 @@ interface EmailUpdateSectionProps {
 const EmailUpdateSection: React.FC<EmailUpdateSectionProps> = ({ 
   className = '' 
 }) => {
-  const { user, updateUser } = useAuthStore();
+  const { user } = useAuthStore();
+  const { updateProfile } = useAuthActions();
   const [isEditing, setIsEditing] = useState(false);
   const [newEmail, setNewEmail] = useState('');
   const [isUpdating, setIsUpdating] = useState(false);
@@ -50,7 +51,7 @@ const EmailUpdateSection: React.FC<EmailUpdateSectionProps> = ({
 
     // Check if email is different
     if (newEmail === user.email) {
-      toast.info('Email address is the same as current');
+      toast('Email address is the same as current', { icon: 'ℹ️' });
       setIsEditing(false);
       return;
     }
@@ -79,8 +80,7 @@ const EmailUpdateSection: React.FC<EmailUpdateSectionProps> = ({
 
       if (data.success) {
         // Update user in auth store
-        updateUser({
-          ...user,
+        await updateProfile({
           email: newEmail.toLowerCase().trim(),
           isEmailVerified: false // Reset verification status
         });

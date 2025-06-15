@@ -228,7 +228,7 @@ const SystemPage: React.FC = () => {
   useEffect(() => {
     console.log('🔄 System Health useEffect triggered:', {
       isAuthenticated,
-      user: user ? { id: user.id, role: user.role, email: user.email } : null,
+      user: user ? { id: (user as any).id || user._id, role: user.role, email: user.email } : null,
       hasRouter: !!router
     });
 
@@ -278,8 +278,8 @@ const SystemPage: React.FC = () => {
       // Test if we can reach the backend at all
       console.log('🌐 Testing backend connectivity...');
       console.log('🔧 API Client config:', {
-        baseURL: apiClient.defaults?.baseURL,
-        headers: apiClient.defaults?.headers
+        baseURL: (apiClient as any).defaults?.baseURL,
+        headers: (apiClient as any).defaults?.headers
       });
 
       console.log('🚀 Making API request to /admin/system/health...');
@@ -295,7 +295,7 @@ const SystemPage: React.FC = () => {
 
       // Ensure we only use real data from the response
       if (response.success && response.data) {
-        setSystemHealth(response.data);
+        setSystemHealth(response.data as any);
         console.log('📊 Real system health data loaded successfully');
       } else {
         console.warn('⚠️ Invalid response format:', response);
@@ -677,7 +677,7 @@ const SystemPage: React.FC = () => {
                                   style={{ width: `${systemHealth.server.disk.percentage}%` }}
                                 ></div>
                               </div>
-                              <span className="text-sm font-medium">{systemHealth.server.disk.percentage.toFixed(1)}%</span>
+                              <span className="text-sm font-medium">{systemHealth.server.disk.percentage?.toFixed(1) || 0}%</span>
                             </>
                           ) : (
                             <span className="text-sm text-gray-500">
@@ -819,15 +819,15 @@ const SystemPage: React.FC = () => {
 
                         <div className="flex items-center justify-between">
                           <span className="text-sm text-gray-600">Error Rate</span>
-                          <span className={`text-sm font-medium ${(systemHealth.api.overall?.errorRate || systemHealth.api.errorRate || 0) > 5 ? 'text-red-600' : 'text-green-600'}`}>
-                            {(systemHealth.api.overall?.errorRate || systemHealth.api.errorRate || 0).toFixed(2)}%
+                          <span className={`text-sm font-medium ${Number(systemHealth.api.overall?.errorRate || systemHealth.api.errorRate || 0) > 5 ? 'text-red-600' : 'text-green-600'}`}>
+                            {Number(systemHealth.api.overall?.errorRate || systemHealth.api.errorRate || 0).toFixed(2)}%
                           </span>
                         </div>
 
                         <div className="flex items-center justify-between">
                           <span className="text-sm text-gray-600">Avg Response Time</span>
                           <span className="text-sm font-medium">
-                            {(systemHealth.api.overall?.averageResponseTime || systemHealth.api.averageResponseTime || 0).toFixed(1)}ms
+                            {Number(systemHealth.api.overall?.averageResponseTime || systemHealth.api.averageResponseTime || 0).toFixed(1)}ms
                           </span>
                         </div>
 

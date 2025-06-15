@@ -70,7 +70,11 @@ const AdminUsersPage: React.FC = () => {
         page: currentPage,
         limit: 20,
         search: searchTerm,
-        ...filters
+        role: filters.role,
+        isEmailVerified: filters.isEmailVerified === 'true' ? true : filters.isEmailVerified === 'false' ? false : undefined,
+        isActive: filters.isActive === 'true' ? true : filters.isActive === 'false' ? false : undefined,
+        sortBy: filters.sortBy,
+        sortOrder: filters.sortOrder
       });
       setUsers(response.data);
       setPagination(response.pagination);
@@ -175,7 +179,7 @@ const AdminUsersPage: React.FC = () => {
 
     try {
       await adminApi.bulkUserOperations({
-        operation,
+        operation: operation as any,
         userIds: selectedUsers,
         data
       });

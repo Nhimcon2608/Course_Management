@@ -67,7 +67,7 @@ export default function VerifyEmailPage() {
   const { user } = useAuthStore();
   const { updateProfile } = useAuthStore();
 
-  const token = searchParams.get('token');
+  const token = searchParams?.get('token');
 
   // Memoized verification function
   const executeVerification = useCallback(async (verificationToken: string) => {

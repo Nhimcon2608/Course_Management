@@ -134,8 +134,8 @@ export const useOrderStore = create<OrderState>()(
             set({
               currentOrder: {
                 ...currentOrder,
-                paymentStatus: statusData.paymentStatus,
-                status: statusData.orderStatus,
+                paymentStatus: statusData.paymentStatus as any,
+                status: statusData.orderStatus as any,
                 completedAt: statusData.completedAt
               }
             });
@@ -143,12 +143,12 @@ export const useOrderStore = create<OrderState>()(
 
           // Update in orders list
           const { orders } = get();
-          const updatedOrders = orders.map(order => 
-            order._id === orderId 
+          const updatedOrders = orders.map(order =>
+            order._id === orderId
               ? {
                   ...order,
-                  paymentStatus: statusData.paymentStatus,
-                  status: statusData.orderStatus,
+                  paymentStatus: statusData.paymentStatus as any,
+                  status: statusData.orderStatus as any,
                   completedAt: statusData.completedAt
                 }
               : order

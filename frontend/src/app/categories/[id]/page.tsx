@@ -56,7 +56,7 @@ const CategoryCoursesPage: React.FC = () => {
 
   useEffect(() => {
     fetchCategoryData();
-  }, [params.id, currentPage, searchTerm, selectedLevel, minPrice, maxPrice, sortBy]);
+  }, [params?.id, currentPage, searchTerm, selectedLevel, minPrice, maxPrice, sortBy]);
 
   const fetchCategoryData = async () => {
     try {
@@ -73,7 +73,7 @@ const CategoryCoursesPage: React.FC = () => {
       if (minPrice) filters.minPrice = Number(minPrice);
       if (maxPrice) filters.maxPrice = Number(maxPrice);
 
-      const response = await categoryApi.getCategoryCourses(params.id as string, filters);
+      const response = await categoryApi.getCategoryCourses(params?.id as string, filters);
       
       if (response.success && response.data) {
         setCategory(response.data.category);

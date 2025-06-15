@@ -129,26 +129,9 @@ export interface Review {
   updatedAt: string;
 }
 
-// Order Types
-export interface Order {
-  _id: string;
-  user: string | User;
-  courses: OrderItem[];
-  totalAmount: number;
-  status: 'pending' | 'completed' | 'cancelled' | 'refunded';
-  paymentMethod: 'stripe' | 'paypal' | 'bank_transfer';
-  paymentStatus: 'pending' | 'paid' | 'failed' | 'refunded';
-  paymentId?: string;
-  createdAt: string;
-  updatedAt: string;
-}
 
-// Order Item Types
-export interface OrderItem {
-  course: string | Course;
-  price: number;
-  discountAmount?: number;
-}
+
+
 
 // Cart Types
 export interface Cart {

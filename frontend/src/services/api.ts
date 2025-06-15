@@ -18,6 +18,7 @@ api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('token');
     if (token) {
+      config.headers = config.headers || {};
       config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
@@ -258,7 +259,7 @@ export const courseApi = {
       });
 
       const response = await api.get(`/courses?${params.toString()}`);
-      return response.data;
+      return response.data as ApiResponse<{ courses: Course[]; pagination: any; }>;
     } catch (error) {
       console.error('API call failed for courses:', error);
       throw error; // Don't fall back to mock data, let the component handle the error
@@ -291,7 +292,7 @@ export const courseApi = {
 
     try {
       const response = await api.get(`/courses/${id}`);
-      return response.data;
+      return response.data as ApiResponse<{ course: Course; reviews: Review[]; relatedCourses: Course[]; isEnrolled: boolean; }>;
     } catch (error) {
       console.error('API call failed for course:', id, error);
       throw error; // Don't fall back to mock data, let the component handle the error
@@ -308,13 +309,13 @@ export const courseApi = {
     });
 
     const response = await api.get(`/courses/${courseId}/reviews?${queryParams.toString()}`);
-    return response.data;
+    return response.data as ApiResponse<{ reviews: Review[]; pagination: any; }>;
   },
 
   // Enroll in course
   enrollInCourse: async (courseId: string): Promise<ApiResponse> => {
     const response = await api.post(`/courses/${courseId}/enroll`);
-    return response.data;
+    return response.data as ApiResponse<any>;
   },
 };
 
@@ -348,7 +349,7 @@ export const categoryApi = {
       });
 
       const response = await api.get(`/categories?${queryParams.toString()}`);
-      return response.data;
+      return response.data as ApiResponse<{ categories: Category[]; }>;
     } catch (error) {
       console.error('API call failed for categories:', error);
       throw error; // Don't fall back to mock data, let the component handle the error
@@ -358,7 +359,7 @@ export const categoryApi = {
   // Get single category
   getCategory: async (id: string, includePath = false): Promise<ApiResponse<{ category: Category; path: any[] }>> => {
     const response = await api.get(`/categories/${id}?includePath=${includePath}`);
-    return response.data;
+    return response.data as ApiResponse<{ category: Category; path: any[] }>;
   },
 
   // Get courses by category
@@ -440,7 +441,7 @@ export const categoryApi = {
       });
 
       const response = await api.get(`/categories/${categoryId}/courses?${params.toString()}`);
-      return response.data;
+      return response.data as ApiResponse<{ category: Category; categoryPath: any[]; courses: Course[]; pagination: any }>;
     } catch (error) {
       console.error('API call failed for category courses:', error);
       throw error; // Don't fall back to mock data, let the component handle the error

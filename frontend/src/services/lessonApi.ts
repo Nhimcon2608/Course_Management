@@ -104,11 +104,12 @@ class LessonAPI {
   // Lesson Management
   async getLessons(courseId: string): Promise<{ lessons: Lesson[]; total: number }> {
     const response = await apiClient.get(`${this.baseUrl}/courses/${courseId}/lessons`);
-    
-    if (response.data && response.data.data) {
-      return response.data.data;
-    } else if (response.data && Array.isArray(response.data.lessons)) {
-      return response.data;
+    const data = response.data as any;
+
+    if (data && data.data) {
+      return data.data;
+    } else if (data && Array.isArray(data.lessons)) {
+      return data;
     } else {
       throw new Error('Invalid response format');
     }
@@ -116,11 +117,12 @@ class LessonAPI {
 
   async getLesson(courseId: string, lessonId: string): Promise<Lesson> {
     const response = await apiClient.get(`${this.baseUrl}/courses/${courseId}/lessons/${lessonId}`);
-    
-    if (response.data && response.data.data) {
-      return response.data.data;
-    } else if (response.data && response.data._id) {
-      return response.data;
+    const data = response.data as any;
+
+    if (data && data.data) {
+      return data.data;
+    } else if (data && data._id) {
+      return data;
     } else {
       throw new Error('Invalid response format');
     }
@@ -128,11 +130,12 @@ class LessonAPI {
 
   async createLesson(courseId: string, lessonData: CreateLessonData): Promise<Lesson> {
     const response = await apiClient.post(`${this.baseUrl}/courses/${courseId}/lessons`, lessonData);
-    
-    if (response.data && response.data.data) {
-      return response.data.data;
-    } else if (response.data && response.data._id) {
-      return response.data;
+    const data = response.data as any;
+
+    if (data && data.data) {
+      return data.data;
+    } else if (data && data._id) {
+      return data;
     } else {
       throw new Error('Invalid response format');
     }
@@ -140,11 +143,12 @@ class LessonAPI {
 
   async updateLesson(courseId: string, lessonId: string, lessonData: UpdateLessonData): Promise<Lesson> {
     const response = await apiClient.put(`${this.baseUrl}/courses/${courseId}/lessons/${lessonId}`, lessonData);
-    
-    if (response.data && response.data.data) {
-      return response.data.data;
-    } else if (response.data && response.data._id) {
-      return response.data;
+    const data = response.data as any;
+
+    if (data && data.data) {
+      return data.data;
+    } else if (data && data._id) {
+      return data;
     } else {
       throw new Error('Invalid response format');
     }
@@ -174,7 +178,7 @@ class LessonAPI {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
-        onUploadProgress: (progressEvent) => {
+        onUploadProgress: (progressEvent: any) => {
           if (onProgress && progressEvent.total) {
             const progress = Math.round((progressEvent.loaded * 100) / progressEvent.total);
             onProgress(progress);
@@ -216,11 +220,12 @@ class LessonAPI {
       `${this.baseUrl}/courses/${courseId}/lessons/${lessonId}/video/metadata`,
       metadata
     );
+    const data = response.data as any;
 
-    if (response.data && response.data.data) {
-      return response.data.data;
-    } else if (response.data && response.data._id) {
-      return response.data;
+    if (data && data.data) {
+      return data.data;
+    } else if (data && data._id) {
+      return data;
     } else {
       throw new Error('Invalid response format');
     }
@@ -243,11 +248,12 @@ class LessonAPI {
   // Assignment Management
   async getAssignments(courseId: string, lessonId: string): Promise<{ assignments: Assignment[]; total: number }> {
     const response = await apiClient.get(`${this.baseUrl}/courses/${courseId}/lessons/${lessonId}/assignments`);
-    
-    if (response.data && response.data.data) {
-      return response.data.data;
-    } else if (response.data && Array.isArray(response.data.assignments)) {
-      return response.data;
+    const data = response.data as any;
+
+    if (data && data.data) {
+      return data.data;
+    } else if (data && Array.isArray(data.assignments)) {
+      return data;
     } else {
       throw new Error('Invalid response format');
     }
@@ -269,11 +275,12 @@ class LessonAPI {
       `${this.baseUrl}/courses/${courseId}/lessons/${lessonId}/assignments`,
       assignmentData
     );
+    const data = response.data as any;
 
-    if (response.data && response.data.data) {
-      return response.data.data;
-    } else if (response.data && response.data._id) {
-      return response.data;
+    if (data && data.data) {
+      return data.data;
+    } else if (data && data._id) {
+      return data;
     } else {
       throw new Error('Invalid response format');
     }
@@ -284,11 +291,12 @@ class LessonAPI {
       `${this.baseUrl}/courses/${courseId}/assignments/${assignmentId}`,
       assignmentData
     );
-    
-    if (response.data && response.data.data) {
-      return response.data.data;
-    } else if (response.data && response.data._id) {
-      return response.data;
+    const data = response.data as any;
+
+    if (data && data.data) {
+      return data.data;
+    } else if (data && data._id) {
+      return data;
     } else {
       throw new Error('Invalid response format');
     }

@@ -86,7 +86,7 @@ const EditUserModal: React.FC<EditUserModalProps> = ({
     
     // Clear error when user starts typing
     if (errors[field]) {
-      setErrors(prev => ({ ...prev, [field]: '' }));
+      setErrors((prev: any) => ({ ...prev, [field]: '' }));
     }
   };
 

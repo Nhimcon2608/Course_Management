@@ -256,7 +256,7 @@ export const adminApi = {
     sendWelcomeEmail?: boolean;
   }): Promise<{ user: AdminUser; temporaryPassword?: string }> => {
     const response = await apiClient.post('/admin/users', userData);
-    return response.data!;
+    return response.data as { user: AdminUser; temporaryPassword?: string };
   },
 
   updateUserProfile: async (userId: string, userData: {
@@ -268,7 +268,7 @@ export const adminApi = {
     avatar?: string;
   }): Promise<{ user: AdminUser }> => {
     const response = await apiClient.put(`/admin/users/${userId}`, userData);
-    return response.data!;
+    return response.data as { user: AdminUser };
   },
 
   deleteUser: async (userId: string, force = false): Promise<void> => {
@@ -283,7 +283,7 @@ export const adminApi = {
     data?: any;
   }): Promise<{ modifiedCount: number; operation: string }> => {
     const response = await apiClient.post('/admin/users/bulk', data);
-    return response.data!;
+    return response.data as { modifiedCount: number; operation: string };
   },
 
   // Analytics
@@ -299,6 +299,6 @@ export const adminApi = {
     });
 
     const response = await apiClient.get(`/admin/analytics?${searchParams.toString()}`);
-    return response.data!;
+    return response.data as { analytics: any };
   }
 };

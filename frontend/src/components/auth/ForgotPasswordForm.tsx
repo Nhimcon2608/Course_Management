@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { Mail, Send, CheckCircle, AlertCircle } from 'lucide-react';
+import { Send, CheckCircle, AlertCircle } from 'lucide-react';
 import toast from 'react-hot-toast';
 import Button from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
@@ -153,7 +153,6 @@ const ForgotPasswordForm: React.FC = () => {
               type="email"
               autoComplete="email"
               placeholder="Enter your email address"
-              icon={Mail}
               {...register('email', {
                 required: 'Email is required',
                 pattern: {

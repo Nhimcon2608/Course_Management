@@ -91,15 +91,15 @@ const EditCoursePage: React.FC = () => {
         setFormData({
           title: course.title || '',
           description: course.description || '',
-          shortDescription: course.shortDescription || '',
+          shortDescription: (course as any).shortDescription || '',
           price: course.price || 0,
           originalPrice: course.originalPrice || 0,
           category: course.category?._id || '',
           level: course.level || 'beginner',
           duration: course.duration || 0,
-          requirements: course.requirements?.length ? course.requirements : [''],
-          whatYouWillLearn: course.whatYouWillLearn?.length ? course.whatYouWillLearn : [''],
-          tags: course.tags?.length ? course.tags : [''],
+          requirements: (course as any).requirements?.length ? (course as any).requirements : [''],
+          whatYouWillLearn: (course as any).whatYouWillLearn?.length ? (course as any).whatYouWillLearn : [''],
+          tags: (course as any).tags?.length ? (course as any).tags : [''],
           thumbnail: course.thumbnail || ''
         });
 
@@ -153,7 +153,7 @@ const EditCoursePage: React.FC = () => {
     const errors: string[] = [];
 
     // Title validation
-    if (!formData.title.trim()) {
+    if (!formData.title?.trim()) {
       errors.push('Tiêu đề khóa học là bắt buộc');
     } else if (formData.title.trim().length < 5) {
       errors.push('Tiêu đề khóa học phải có ít nhất 5 ký tự');
@@ -162,18 +162,18 @@ const EditCoursePage: React.FC = () => {
     }
 
     // Description validation
-    if (!formData.description.trim()) {
+    if (!formData.description?.trim()) {
       errors.push('Mô tả khóa học là bắt buộc');
-    } else if (formData.description.trim().length < 50) {
+    } else if (formData.description?.trim().length < 50) {
       errors.push('Mô tả khóa học phải có ít nhất 50 ký tự');
     }
 
     // Short description validation
-    if (!formData.shortDescription.trim()) {
+    if (!formData.shortDescription?.trim()) {
       errors.push('Mô tả ngắn là bắt buộc');
-    } else if (formData.shortDescription.trim().length < 20) {
+    } else if (formData.shortDescription?.trim().length < 20) {
       errors.push('Mô tả ngắn phải có ít nhất 20 ký tự');
-    } else if (formData.shortDescription.trim().length > 500) {
+    } else if (formData.shortDescription?.trim().length > 500) {
       errors.push('Mô tả ngắn không được vượt quá 500 ký tự');
     }
 
@@ -183,17 +183,17 @@ const EditCoursePage: React.FC = () => {
     }
 
     // Price validation
-    if (formData.price <= 0) {
+    if ((formData.price || 0) <= 0) {
       errors.push('Giá phải lớn hơn 0');
     }
 
     // Duration validation
-    if (formData.duration < 0.5) {
+    if ((formData.duration || 0) < 0.5) {
       errors.push('Thời lượng phải ít nhất 0.5 giờ');
     }
 
     // Thumbnail validation
-    if (!formData.thumbnail || !formData.thumbnail.trim()) {
+    if (!formData.thumbnail || !formData.thumbnail?.trim()) {
       errors.push('Ảnh thumbnail là bắt buộc');
     }
 
@@ -333,10 +333,10 @@ const EditCoursePage: React.FC = () => {
                       value={formData.title}
                       onChange={(e) => handleInputChange('title', e.target.value)}
                       className={`w-full px-3 py-2 border rounded-md focus:ring-primary-500 focus:border-primary-500 ${
-                        formData.title.length > 0 && formData.title.length < 5 
-                          ? 'border-red-300' 
-                          : formData.title.length > 200 
-                          ? 'border-red-300' 
+                        (formData.title?.length || 0) > 0 && (formData.title?.length || 0) < 5
+                          ? 'border-red-300'
+                          : (formData.title?.length || 0) > 200
+                          ? 'border-red-300'
                           : 'border-gray-300'
                       }`}
                       placeholder="Nhập tiêu đề khóa học (5-200 ký tự)"
@@ -344,16 +344,16 @@ const EditCoursePage: React.FC = () => {
                     />
                     <div className="mt-1 flex justify-between text-sm">
                       <span className={`${
-                        formData.title.length < 5 && formData.title.length > 0 
-                          ? 'text-red-600' 
+                        (formData.title?.length || 0) < 5 && (formData.title?.length || 0) > 0
+                          ? 'text-red-600'
                           : 'text-gray-500'
                       }`}>
-                        {formData.title.length < 5 ? 'Tối thiểu 5 ký tự' : ''}
+                        {(formData.title?.length || 0) < 5 ? 'Tối thiểu 5 ký tự' : ''}
                       </span>
                       <span className={`${
-                        formData.title.length > 200 ? 'text-red-600' : 'text-gray-500'
+                        (formData.title?.length || 0) > 200 ? 'text-red-600' : 'text-gray-500'
                       }`}>
-                        {formData.title.length}/200
+                        {formData.title?.length || 0}/200
                       </span>
                     </div>
                   </div>
@@ -388,10 +388,10 @@ const EditCoursePage: React.FC = () => {
                       onChange={(e) => handleInputChange('shortDescription', e.target.value)}
                       rows={3}
                       className={`w-full px-3 py-2 border rounded-md focus:ring-primary-500 focus:border-primary-500 ${
-                        formData.shortDescription.length > 0 && formData.shortDescription.length < 20 
-                          ? 'border-red-300' 
-                          : formData.shortDescription.length > 500 
-                          ? 'border-red-300' 
+                        (formData.shortDescription?.length || 0) > 0 && (formData.shortDescription?.length || 0) < 20
+                          ? 'border-red-300'
+                          : (formData.shortDescription?.length || 0) > 500
+                          ? 'border-red-300'
                           : 'border-gray-300'
                       }`}
                       placeholder="Mô tả ngắn gọn về khóa học (20-500 ký tự)"
@@ -399,16 +399,16 @@ const EditCoursePage: React.FC = () => {
                     />
                     <div className="mt-1 flex justify-between text-sm">
                       <span className={`${
-                        formData.shortDescription.length < 20 && formData.shortDescription.length > 0 
-                          ? 'text-red-600' 
+                        (formData.shortDescription?.length || 0) < 20 && (formData.shortDescription?.length || 0) > 0
+                          ? 'text-red-600'
                           : 'text-gray-500'
                       }`}>
-                        {formData.shortDescription.length < 20 ? 'Tối thiểu 20 ký tự' : ''}
+                        {(formData.shortDescription?.length || 0) < 20 ? 'Tối thiểu 20 ký tự' : ''}
                       </span>
                       <span className={`${
-                        formData.shortDescription.length > 500 ? 'text-red-600' : 'text-gray-500'
+                        (formData.shortDescription?.length || 0) > 500 ? 'text-red-600' : 'text-gray-500'
                       }`}>
-                        {formData.shortDescription.length}/500
+                        {formData.shortDescription?.length || 0}/500
                       </span>
                     </div>
                   </div>
@@ -423,8 +423,8 @@ const EditCoursePage: React.FC = () => {
                       onChange={(e) => handleInputChange('description', e.target.value)}
                       rows={6}
                       className={`w-full px-3 py-2 border rounded-md focus:ring-primary-500 focus:border-primary-500 ${
-                        formData.description.length > 0 && formData.description.length < 50 
-                          ? 'border-red-300' 
+                        (formData.description?.length || 0) > 0 && (formData.description?.length || 0) < 50
+                          ? 'border-red-300'
                           : 'border-gray-300'
                       }`}
                       placeholder="Mô tả chi tiết về khóa học (tối thiểu 50 ký tự)"
@@ -432,14 +432,14 @@ const EditCoursePage: React.FC = () => {
                     />
                     <div className="mt-1 flex justify-between text-sm">
                       <span className={`${
-                        formData.description.length < 50 && formData.description.length > 0 
-                          ? 'text-red-600' 
+                        (formData.description?.length || 0) < 50 && (formData.description?.length || 0) > 0
+                          ? 'text-red-600'
                           : 'text-gray-500'
                       }`}>
-                        {formData.description.length < 50 ? 'Tối thiểu 50 ký tự' : ''}
+                        {(formData.description?.length || 0) < 50 ? 'Tối thiểu 50 ký tự' : ''}
                       </span>
                       <span className="text-gray-500">
-                        {formData.description.length} ký tự
+                        {formData.description?.length || 0} ký tự
                       </span>
                     </div>
                   </div>

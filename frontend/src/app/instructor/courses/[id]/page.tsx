@@ -28,7 +28,7 @@ import Link from 'next/link';
 const CourseDetailPage: React.FC = () => {
   const router = useRouter();
   const params = useParams();
-  const courseId = params.id as string;
+  const courseId = params?.id as string;
   const { user, isAuthenticated, isLoading } = useAuth();
   const { initializeAuth } = useAuthActions();
   const [authChecked, setAuthChecked] = useState(false);
@@ -185,7 +185,7 @@ const CourseDetailPage: React.FC = () => {
                 <h1 className="text-3xl font-bold text-gray-900">{course.title}</h1>
                 {getStatusBadge(course)}
               </div>
-              <p className="text-gray-600 mb-4">{course.shortDescription}</p>
+              <p className="text-gray-600 mb-4">{(course as any).shortDescription}</p>
               <div className="flex items-center space-x-6 text-sm text-gray-500">
                 <div className="flex items-center">
                   <Calendar className="w-4 h-4 mr-1" />
@@ -275,11 +275,11 @@ const CourseDetailPage: React.FC = () => {
             </div>
 
             {/* What You'll Learn */}
-            {course.whatYouWillLearn && course.whatYouWillLearn.length > 0 && (
+            {(course as any).whatYouWillLearn && (course as any).whatYouWillLearn.length > 0 && (
               <div className="bg-white rounded-lg shadow-sm p-6">
                 <h2 className="text-xl font-semibold text-gray-900 mb-4">Bạn sẽ học được gì</h2>
                 <ul className="space-y-2">
-                  {course.whatYouWillLearn.map((item, index) => (
+                  {(course as any).whatYouWillLearn.map((item: string, index: number) => (
                     <li key={index} className="flex items-start">
                       <CheckCircle className="w-5 h-5 text-green-500 mr-3 mt-0.5 flex-shrink-0" />
                       <span className="text-gray-700">{item}</span>
@@ -290,11 +290,11 @@ const CourseDetailPage: React.FC = () => {
             )}
 
             {/* Requirements */}
-            {course.requirements && course.requirements.length > 0 && (
+            {(course as any).requirements && (course as any).requirements.length > 0 && (
               <div className="bg-white rounded-lg shadow-sm p-6">
                 <h2 className="text-xl font-semibold text-gray-900 mb-4">Yêu cầu</h2>
                 <ul className="space-y-2">
-                  {course.requirements.map((item, index) => (
+                  {(course as any).requirements.map((item: string, index: number) => (
                     <li key={index} className="flex items-start">
                       <div className="w-2 h-2 bg-gray-400 rounded-full mr-3 mt-2 flex-shrink-0"></div>
                       <span className="text-gray-700">{item}</span>
@@ -305,11 +305,11 @@ const CourseDetailPage: React.FC = () => {
             )}
 
             {/* Tags */}
-            {course.tags && course.tags.length > 0 && (
+            {(course as any).tags && (course as any).tags.length > 0 && (
               <div className="bg-white rounded-lg shadow-sm p-6">
                 <h2 className="text-xl font-semibold text-gray-900 mb-4">Tags</h2>
                 <div className="flex flex-wrap gap-2">
-                  {course.tags.map((tag, index) => (
+                  {(course as any).tags.map((tag: string, index: number) => (
                     <span
                       key={index}
                       className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800"

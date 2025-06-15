@@ -126,14 +126,14 @@ const CreateCoursePage: React.FC = () => {
 
       // Handle categories response - check multiple possible response structures
       let categoriesData = [];
-      if (categoriesRes?.data?.categories) {
-        categoriesData = categoriesRes.data.categories;
-      } else if (categoriesRes?.categories) {
-        categoriesData = categoriesRes.categories;
-      } else if (Array.isArray(categoriesRes?.data)) {
-        categoriesData = categoriesRes.data;
+      if ((categoriesRes as any)?.data?.categories) {
+        categoriesData = (categoriesRes as any).data.categories;
+      } else if ((categoriesRes as any)?.categories) {
+        categoriesData = (categoriesRes as any).categories;
+      } else if (Array.isArray((categoriesRes as any)?.data)) {
+        categoriesData = (categoriesRes as any).data;
       } else if (Array.isArray(categoriesRes)) {
-        categoriesData = categoriesRes;
+        categoriesData = categoriesRes as any;
       }
 
       setCategories(categoriesData);
@@ -141,14 +141,14 @@ const CreateCoursePage: React.FC = () => {
 
       // Handle instructors response - check multiple possible response structures
       let instructorsData = [];
-      if (instructorsRes?.data?.users) {
-        instructorsData = instructorsRes.data.users;
-      } else if (instructorsRes?.users) {
-        instructorsData = instructorsRes.users;
-      } else if (Array.isArray(instructorsRes?.data)) {
-        instructorsData = instructorsRes.data;
+      if ((instructorsRes as any)?.data?.users) {
+        instructorsData = (instructorsRes as any).data.users;
+      } else if ((instructorsRes as any)?.users) {
+        instructorsData = (instructorsRes as any).users;
+      } else if (Array.isArray((instructorsRes as any)?.data)) {
+        instructorsData = (instructorsRes as any).data;
       } else if (Array.isArray(instructorsRes)) {
-        instructorsData = instructorsRes;
+        instructorsData = instructorsRes as any;
       }
 
       setInstructors(instructorsData);
@@ -266,7 +266,7 @@ const CreateCoursePage: React.FC = () => {
 
     // Clear error when user starts typing
     if (errors[field]) {
-      setErrors(prev => ({ ...prev, [field]: '' }));
+      setErrors((prev: any) => ({ ...prev, [field]: '' }));
     }
   };
 
@@ -498,7 +498,7 @@ const CreateCoursePage: React.FC = () => {
                     <ul className="list-disc pl-5 space-y-1">
                       {Object.entries(errors).map(([field, message]) => (
                         <li key={field}>
-                          <strong className="capitalize">{field.replace(/([A-Z])/g, ' $1').toLowerCase()}:</strong> {message}
+                          <strong className="capitalize">{field.replace(/([A-Z])/g, ' $1').toLowerCase()}:</strong> {message as string}
                         </li>
                       ))}
                     </ul>

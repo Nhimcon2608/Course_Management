@@ -347,15 +347,15 @@ export default function CheckoutPage() {
               {/* Cart Items */}
               <div className="space-y-4 mb-6">
                 {cart.items.map((item) => (
-                  <div key={item.course._id} className="flex items-center space-x-3">
+                  <div key={(item.course as any)._id} className="flex items-center space-x-3">
                     <img
-                      src={item.course.thumbnail || '/placeholder-course.jpg'}
-                      alt={item.course.title}
+                      src={(item.course as any).thumbnail || '/placeholder-course.jpg'}
+                      alt={(item.course as any).title}
                       className="w-12 h-12 rounded object-cover"
                     />
                     <div className="flex-1 min-w-0">
                       <p className="text-sm font-medium text-gray-900 truncate">
-                        {item.course.title}
+                        {(item.course as any).title}
                       </p>
                       <p className="text-sm text-gray-500">
                         {formatPrice(item.price)}
@@ -372,7 +372,7 @@ export default function CheckoutPage() {
                   <span>{formatPrice(summary?.totalAmount || 0)}</span>
                 </div>
                 
-                {summary?.discountAmount > 0 && (
+                {summary?.discountAmount && summary.discountAmount > 0 && (
                   <div className="flex justify-between text-sm text-green-600">
                     <span>Discount</span>
                     <span>-{formatPrice(summary.discountAmount)}</span>

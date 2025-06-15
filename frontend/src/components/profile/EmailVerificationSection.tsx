@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { toast } from 'react-hot-toast';
-import { useAuthStore } from '@/store/authStore';
+import { useAuthStore, useAuthActions } from '@/store/authStore';
 import { 
   Mail, 
   CheckCircle, 
@@ -25,7 +25,8 @@ interface RateLimitInfo {
 const EmailVerificationSection: React.FC<EmailVerificationSectionProps> = ({ 
   className = '' 
 }) => {
-  const { user, updateUser } = useAuthStore();
+  const { user } = useAuthStore();
+  const { updateProfile } = useAuthActions();
   const [isResending, setIsResending] = useState(false);
   const [rateLimitInfo, setRateLimitInfo] = useState<RateLimitInfo>({ remaining: 3 });
   const [cooldownTime, setCooldownTime] = useState<number | null>(null);
@@ -138,9 +139,9 @@ const EmailVerificationSection: React.FC<EmailVerificationSectionProps> = ({
                   <CheckCircle className="h-4 w-4 text-green-500 mr-2" />
                   Your email address has been verified and is secure.
                 </p>
-                {user.emailVerifiedAt && (
+                {user.createdAt && (
                   <p className="mt-1 text-xs text-gray-500">
-                    Verified on {new Date(user.emailVerifiedAt).toLocaleDateString()}
+                    Account created on {new Date(user.createdAt).toLocaleDateString()}
                   </p>
                 )}
               </div>

@@ -56,7 +56,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ redirectTo }) => {
   // Redirect if already authenticated with role-based routing
   useEffect(() => {
     if (isAuthenticated && user) {
-      let destination = redirectTo || searchParams.get('redirect');
+      let destination = redirectTo || (searchParams ? searchParams.get('redirect') : null);
 
       // If no specific destination, redirect based on user role
       if (!destination) {
@@ -119,17 +119,17 @@ const LoginForm: React.FC<LoginFormProps> = ({ redirectTo }) => {
       console.log('🔄 Triggering auth state update...');
 
       // Determine redirect destination based on user role from login response
-      let destination = redirectTo || searchParams.get('redirect');
+      let destination = redirectTo || (searchParams ? searchParams.get('redirect') : null);
 
       // If no specific destination, redirect based on role
       if (!destination) {
         // Get user role from login response (most reliable source)
-        const userRole = loginResponse?.user?.role;
+        const userRole = (loginResponse as any)?.user?.role;
         console.log('🔍 Role-based redirect logic:', {
-          loginResponse: loginResponse?.user,
+          loginResponse: (loginResponse as any)?.user,
           userRole,
           redirectTo,
-          searchParamsRedirect: searchParams.get('redirect')
+          searchParamsRedirect: searchParams ? searchParams.get('redirect') : null
         });
 
         destination = userRole === 'admin'

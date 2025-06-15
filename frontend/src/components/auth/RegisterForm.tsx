@@ -117,7 +117,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ redirectTo }) => {
       // If no specific destination, redirect based on role from registration response
       if (!destination) {
         // Use the role from the registration response if available, otherwise fall back to form data
-        const userRole = response?.user?.role || data.role;
+        const userRole = (response as any)?.user?.role || data.role;
         destination = userRole === 'admin'
           ? '/admin/dashboard'
           : userRole === 'instructor'

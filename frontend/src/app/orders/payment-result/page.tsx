@@ -19,8 +19,8 @@ import toast from 'react-hot-toast';
 export default function PaymentResultPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const appTransId = searchParams.get('apptransid');
-  const orderIdFromUrl = searchParams.get('orderId');
+  const appTransId = searchParams?.get('apptransid');
+  const orderIdFromUrl = searchParams?.get('orderId');
 
   const { 
     orders,
@@ -415,8 +415,8 @@ export default function PaymentResultPage() {
                 <h3 className="text-lg font-semibold text-gray-900 mb-4">Order Summary</h3>
                 
                 <div className="space-y-4 mb-6">
-                  {currentOrder.courses.map((item: any) => (
-                    <div key={item.course} className="flex items-center space-x-3">
+                  {currentOrder.courses.map((item: any, index: number) => (
+                    <div key={index} className="flex items-center space-x-3">
                       <img
                         src={item.thumbnail || '/placeholder-course.jpg'}
                         alt={item.title}

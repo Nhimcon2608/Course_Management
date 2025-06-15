@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useForm } from 'react-hook-form';
-import { Lock, Eye, EyeOff, CheckCircle, AlertCircle, Loader } from 'lucide-react';
+import { Eye, EyeOff, CheckCircle, AlertCircle, Loader } from 'lucide-react';
 import toast from 'react-hot-toast';
 import Button from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
@@ -17,7 +17,7 @@ interface ResetPasswordFormData {
 const ResetPasswordForm: React.FC = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const token = searchParams.get('token');
+  const token = searchParams?.get('token');
 
   const [isLoading, setIsLoading] = useState(false);
   const [isVerifying, setIsVerifying] = useState(true);
@@ -243,7 +243,6 @@ const ResetPasswordForm: React.FC = () => {
               type={showPassword ? 'text' : 'password'}
               autoComplete="new-password"
               placeholder="Enter your new password"
-              icon={Lock}
               {...register('password', {
                 required: 'Password is required',
                 minLength: {
@@ -283,7 +282,6 @@ const ResetPasswordForm: React.FC = () => {
               type={showConfirmPassword ? 'text' : 'password'}
               autoComplete="new-password"
               placeholder="Confirm your new password"
-              icon={Lock}
               {...register('confirmPassword', {
                 required: 'Please confirm your password',
                 validate: (value) => value === password || 'Passwords do not match'

@@ -187,7 +187,7 @@ class InstructorDashboardAPI {
   // Dashboard Stats
   async getStats(): Promise<InstructorStats> {
     const response = await apiClient.get(`${this.baseUrl}/stats`);
-    return response.data;
+    return response.data as InstructorStats;
   }
 
   // Course Management
@@ -204,26 +204,28 @@ class InstructorDashboardAPI {
     if (params?.search) queryParams.append('search', params.search);
 
     const response = await apiClient.get(`${this.baseUrl}/courses?${queryParams.toString()}`);
+    const data = response.data as any;
 
     // Handle both direct array response and wrapped response
-    if (response.data && response.data.courses) {
-      return response.data.courses;
-    } else if (Array.isArray(response.data)) {
-      return response.data;
+    if (data && data.courses) {
+      return data.courses;
+    } else if (Array.isArray(data)) {
+      return data;
     } else {
-      console.error('Unexpected response format:', response.data);
+      console.error('Unexpected response format:', data);
       return [];
     }
   }
 
   async getCourse(courseId: string): Promise<InstructorCourse> {
     const response = await apiClient.get(`${this.baseUrl}/courses/${courseId}`);
+    const data = response.data as any;
 
     // Handle both direct course response and wrapped response
-    if (response.data && response.data.data) {
-      return response.data.data;
-    } else if (response.data && response.data._id) {
-      return response.data;
+    if (data && data.data) {
+      return data.data;
+    } else if (data && data._id) {
+      return data;
     } else {
       throw new Error('Invalid course response format');
     }
@@ -231,12 +233,13 @@ class InstructorDashboardAPI {
 
   async createCourse(courseData: CreateCourseData): Promise<InstructorCourse> {
     const response = await apiClient.post(`${this.baseUrl}/courses`, courseData);
+    const data = response.data as any;
 
     // Handle both direct course response and wrapped response
-    if (response.data && response.data.data) {
-      return response.data.data;
-    } else if (response.data && response.data._id) {
-      return response.data;
+    if (data && data.data) {
+      return data.data;
+    } else if (data && data._id) {
+      return data;
     } else {
       throw new Error('Invalid course response format');
     }
@@ -244,12 +247,13 @@ class InstructorDashboardAPI {
 
   async updateCourse(courseId: string, courseData: UpdateCourseData): Promise<InstructorCourse> {
     const response = await apiClient.put(`${this.baseUrl}/courses/${courseId}`, courseData);
+    const data = response.data as any;
 
     // Handle both direct course response and wrapped response
-    if (response.data && response.data.data) {
-      return response.data.data;
-    } else if (response.data && response.data._id) {
-      return response.data;
+    if (data && data.data) {
+      return data.data;
+    } else if (data && data._id) {
+      return data;
     } else {
       throw new Error('Invalid course response format');
     }
@@ -274,7 +278,7 @@ class InstructorDashboardAPI {
     if (params?.search) queryParams.append('search', params.search);
 
     const response = await apiClient.get(`${this.baseUrl}/students?${queryParams}`);
-    return response.data;
+    return response.data as { students: InstructorStudent[]; total: number };
   }
 
   async addStudent(data: {
@@ -282,7 +286,7 @@ class InstructorDashboardAPI {
     courseId: string;
   }): Promise<any> {
     const response = await apiClient.post(`${this.baseUrl}/students`, data);
-    return response.data;
+    return response.data as any;
   }
 
   async updateStudent(id: string, data: {
@@ -290,12 +294,12 @@ class InstructorDashboardAPI {
     notes?: string;
   }): Promise<any> {
     const response = await apiClient.put(`${this.baseUrl}/students/${id}`, data);
-    return response.data;
+    return response.data as any;
   }
 
   async removeStudent(id: string): Promise<any> {
     const response = await apiClient.delete(`${this.baseUrl}/students/${id}`);
-    return response.data;
+    return response.data as any;
   }
 
 
@@ -306,12 +310,13 @@ class InstructorDashboardAPI {
       isPublished: true,
       status: 'published'
     });
+    const data = response.data as any;
 
     // Handle both direct course response and wrapped response
-    if (response.data && response.data.data) {
-      return response.data.data;
-    } else if (response.data && response.data._id) {
-      return response.data;
+    if (data && data.data) {
+      return data.data;
+    } else if (data && data._id) {
+      return data;
     } else {
       throw new Error('Invalid course response format');
     }
@@ -322,12 +327,13 @@ class InstructorDashboardAPI {
       isPublished: false,
       status: 'draft'
     });
+    const data = response.data as any;
 
     // Handle both direct course response and wrapped response
-    if (response.data && response.data.data) {
-      return response.data.data;
-    } else if (response.data && response.data._id) {
-      return response.data;
+    if (data && data.data) {
+      return data.data;
+    } else if (data && data._id) {
+      return data;
     } else {
       throw new Error('Invalid course response format');
     }
@@ -345,13 +351,13 @@ class InstructorDashboardAPI {
     lastAccessedAt: string;
   }> {
     const response = await apiClient.get(`${this.baseUrl}/students/${studentId}/progress/${courseId}`);
-    return response.data;
+    return response.data as any;
   }
 
   // Analytics
   async getAnalytics(period: 'week' | 'month' | 'quarter' | 'year' = 'month'): Promise<InstructorAnalytics> {
     const response = await apiClient.get(`${this.baseUrl}/analytics?period=${period}`);
-    return response.data;
+    return response.data as InstructorAnalytics;
   }
 
   async getRevenueData(params?: {
@@ -365,7 +371,7 @@ class InstructorDashboardAPI {
     if (params?.period) queryParams.append('period', params.period);
 
     const response = await apiClient.get(`${this.baseUrl}/analytics/revenue?${queryParams.toString()}`);
-    return response.data;
+    return response.data as any;
   }
 
   // Content Management
@@ -378,7 +384,7 @@ class InstructorDashboardAPI {
         'Content-Type': 'multipart/form-data',
       },
     });
-    return response.data;
+    return response.data as { url: string };
   }
 
   async uploadVideo(courseId: string, lessonId: string, file: File): Promise<{ url: string }> {
@@ -394,7 +400,7 @@ class InstructorDashboardAPI {
         },
       }
     );
-    return response.data;
+    return response.data as { url: string };
   }
 
   // Notifications
@@ -442,14 +448,15 @@ class InstructorDashboardAPI {
   // Profile Management
   async getProfile(): Promise<InstructorProfile> {
     const response = await apiClient.get(`${this.baseUrl}/profile`);
+    const data = response.data as any;
 
     // Handle both direct profile response and wrapped response
-    if (response.data && response.data.data && response.data.data.profile) {
-      return response.data.data.profile;
-    } else if (response.data && response.data.profile) {
-      return response.data.profile;
-    } else if (response.data && response.data._id) {
-      return response.data;
+    if (data && data.data && data.data.profile) {
+      return data.data.profile;
+    } else if (data && data.profile) {
+      return data.profile;
+    } else if (data && data._id) {
+      return data;
     } else {
       throw new Error('Invalid profile response format');
     }
@@ -457,14 +464,15 @@ class InstructorDashboardAPI {
 
   async updateProfile(profileData: UpdateProfileData): Promise<InstructorProfile> {
     const response = await apiClient.put(`${this.baseUrl}/profile`, profileData);
+    const data = response.data as any;
 
     // Handle both direct profile response and wrapped response
-    if (response.data && response.data.data && response.data.data.profile) {
-      return response.data.data.profile;
-    } else if (response.data && response.data.profile) {
-      return response.data.profile;
-    } else if (response.data && response.data._id) {
-      return response.data;
+    if (data && data.data && data.data.profile) {
+      return data.data.profile;
+    } else if (data && data.profile) {
+      return data.profile;
+    } else if (data && data._id) {
+      return data;
     } else {
       throw new Error('Invalid profile response format');
     }
@@ -479,7 +487,7 @@ class InstructorDashboardAPI {
         'Content-Type': 'multipart/form-data',
       },
     });
-    return response.data;
+    return response.data as { url: string };
   }
 }
 

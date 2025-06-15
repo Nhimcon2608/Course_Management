@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-const BACKEND_URL = process.env.BACKEND_URL || 'http://localhost:5000';
+const BACKEND_URL = process.env.BACKEND_URL || process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5000';
 
 export async function POST(request: NextRequest) {
   try {
@@ -50,59 +50,67 @@ export async function POST(request: NextRequest) {
       );
     }
     
-    // Try backend first
-    try {
-      console.log('🔄 Attempting backend registration:', `${BACKEND_URL}/api/auth/register`);
-      
-      const response = await fetch(`${BACKEND_URL}/api/auth/register`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Origin': request.headers.get('origin') || 'http://localhost:3001',
-          'User-Agent': request.headers.get('user-agent') || 'NextJS-Proxy',
-        },
-        body: JSON.stringify(body),
-      });
+    // In production or when backend is not available, use mock authentication
+    const isProduction = process.env.NODE_ENV === 'production';
+    const hasBackend = process.env.BACKEND_URL || process.env.NEXT_PUBLIC_BACKEND_URL;
 
-      console.log('📡 Backend registration response status:', response.status);
-      
-      if (response.ok) {
-        const responseText = await response.text();
-        const data = responseText ? JSON.parse(responseText) : {};
-        
-        const nextResponse = NextResponse.json(data, { status: response.status });
-        
-        // Forward cookies from backend
-        const setCookieHeaders = response.headers.getSetCookie?.() || [];
-        if (setCookieHeaders.length > 0) {
-          console.log('🍪 Setting cookies from backend:', setCookieHeaders.length);
-          setCookieHeaders.forEach(cookie => {
-            nextResponse.headers.append('Set-Cookie', cookie);
-          });
-        }
-        
-        console.log('✅ Backend registration successful');
-        return nextResponse;
-      } else {
-        // Handle backend errors
-        const errorText = await response.text();
-        console.error('❌ Backend registration failed:', {
-          status: response.status,
-          statusText: response.statusText,
-          error: errorText
+    if (!isProduction && hasBackend) {
+      // Try backend first only in development with backend URL
+      try {
+        console.log('🔄 Attempting backend registration:', `${BACKEND_URL}/api/auth/register`);
+
+        const response = await fetch(`${BACKEND_URL}/api/auth/register`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Origin': request.headers.get('origin') || 'http://localhost:3001',
+            'User-Agent': request.headers.get('user-agent') || 'NextJS-Proxy',
+          },
+          body: JSON.stringify(body),
         });
 
-        let errorData;
-        try {
-          errorData = errorText ? JSON.parse(errorText) : {};
-        } catch {
-          errorData = { success: false, message: 'Registration failed' };
-        }
+        console.log('📡 Backend registration response status:', response.status);
 
-        return NextResponse.json(errorData, { status: response.status });
+        if (response.ok) {
+          const responseText = await response.text();
+          const data = responseText ? JSON.parse(responseText) : {};
+
+          const nextResponse = NextResponse.json(data, { status: response.status });
+
+          // Forward cookies from backend
+          const setCookieHeaders = response.headers.getSetCookie?.() || [];
+          if (setCookieHeaders.length > 0) {
+            console.log('🍪 Setting cookies from backend:', setCookieHeaders.length);
+            setCookieHeaders.forEach(cookie => {
+              nextResponse.headers.append('Set-Cookie', cookie);
+            });
+          }
+
+          console.log('✅ Backend registration successful');
+          return nextResponse;
+        } else {
+          // Handle backend errors
+          const errorText = await response.text();
+          console.error('❌ Backend registration failed:', {
+            status: response.status,
+            statusText: response.statusText,
+            error: errorText
+          });
+
+          let errorData;
+          try {
+            errorData = errorText ? JSON.parse(errorText) : {};
+          } catch {
+            errorData = { success: false, message: 'Registration failed' };
+          }
+
+          return NextResponse.json(errorData, { status: response.status });
+        }
+      } catch (backendError) {
+        console.warn('⚠️ Backend unavailable, using mock registration:', (backendError as Error).message);
       }
-    } catch (backendError) {
-      console.warn('⚠️ Backend unavailable, using mock registration:', (backendError as Error).message);
+    } else {
+      console.log('🔄 Using mock registration (production mode or no backend configured)');
     }
     
     // Fallback to mock registration
@@ -177,7 +185,7 @@ export async function POST(request: NextRequest) {
   }
 }
 
-export async function OPTIONS(request: NextRequest) {
+export async function OPTIONS() {
   return new NextResponse(null, {
     status: 200,
     headers: {
@@ -209,5 +217,4 @@ const MOCK_USERS: Record<string, any> = {
     isEmailVerified: true,
     password: '123456'
   }
-  // Clear any previously registered users for testing
 };

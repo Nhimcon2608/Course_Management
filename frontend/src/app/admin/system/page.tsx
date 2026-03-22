@@ -228,7 +228,7 @@ const SystemPage: React.FC = () => {
   useEffect(() => {
     console.log('🔄 System Health useEffect triggered:', {
       isAuthenticated,
-      user: user ? { id: (user as any).id || user._id, role: user.role, email: user.email } : null,
+      user: user ? { id: user._id, role: user.role, email: user.email } : null,
       hasRouter: !!router
     });
 
@@ -277,10 +277,7 @@ const SystemPage: React.FC = () => {
 
       // Test if we can reach the backend at all
       console.log('🌐 Testing backend connectivity...');
-      console.log('🔧 API Client config:', {
-        baseURL: (apiClient as any).defaults?.baseURL,
-        headers: (apiClient as any).defaults?.headers
-      });
+      console.log('🔧 API Client config: Available');
 
       console.log('🚀 Making API request to /admin/system/health...');
       const response = await apiClient.get('/admin/system/health');
@@ -295,7 +292,7 @@ const SystemPage: React.FC = () => {
 
       // Ensure we only use real data from the response
       if (response.success && response.data) {
-        setSystemHealth(response.data as any);
+        setSystemHealth(response.data as SystemHealth);
         console.log('📊 Real system health data loaded successfully');
       } else {
         console.warn('⚠️ Invalid response format:', response);
@@ -677,7 +674,7 @@ const SystemPage: React.FC = () => {
                                   style={{ width: `${systemHealth.server.disk.percentage}%` }}
                                 ></div>
                               </div>
-                              <span className="text-sm font-medium">{systemHealth.server.disk.percentage?.toFixed(1) || 0}%</span>
+                              <span className="text-sm font-medium">{systemHealth.server.disk.percentage?.toFixed(1)}%</span>
                             </>
                           ) : (
                             <span className="text-sm text-gray-500">

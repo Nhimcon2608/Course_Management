@@ -1,11 +1,11 @@
 import api from '@/lib/api';
-import { WishlistResponse } from '@/types';
+import { WishlistResponse, ApiResponse } from '@/types';
 
 export const wishlistApi = {
   // Get user's wishlist
   getWishlist: async (): Promise<WishlistResponse> => {
     const response = await api.get('/wishlist');
-    return response.data as WishlistResponse;
+    return (response.data as ApiResponse<WishlistResponse>).data!;
   },
 
   // Add course to wishlist
@@ -13,7 +13,7 @@ export const wishlistApi = {
     const response = await api.post('/wishlist/add', {
       courseId
     });
-    return response.data as WishlistResponse;
+    return (response.data as ApiResponse<WishlistResponse>).data!;
   },
 
   // Remove course from wishlist
@@ -21,7 +21,7 @@ export const wishlistApi = {
     const response = await api.delete('/wishlist/remove', {
       data: { courseId }
     });
-    return response.data as WishlistResponse;
+    return (response.data as ApiResponse<WishlistResponse>).data!;
   },
 
   // Move course from wishlist to cart
@@ -29,6 +29,6 @@ export const wishlistApi = {
     const response = await api.post('/wishlist/move-to-cart', {
       courseId
     });
-    return response.data as WishlistResponse;
+    return (response.data as ApiResponse<WishlistResponse>).data!;
   }
 };

@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
-import { User, LoginCredentials, RegisterData, AuthResponse } from '@/types';
+import { User, LoginCredentials, RegisterData } from '@/types';
 import { authAPI, authUtils, tokenManager, userManager } from '@/lib/auth';
 
 interface LoginCredentialsWithRememberMe extends LoginCredentials {
@@ -15,8 +15,8 @@ interface AuthState {
   error: string | null;
 
   // Actions
-  login: (credentials: LoginCredentialsWithRememberMe) => Promise<AuthResponse>;
-  register: (data: RegisterData & { rememberMe?: boolean }) => Promise<AuthResponse>;
+  login: (credentials: LoginCredentialsWithRememberMe) => Promise<any>;
+  register: (data: RegisterData & { rememberMe?: boolean }) => Promise<any>;
   logout: () => Promise<void>;
   refreshToken: () => Promise<void>;
   getProfile: () => Promise<void>;

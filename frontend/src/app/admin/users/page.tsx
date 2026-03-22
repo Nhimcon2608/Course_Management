@@ -70,11 +70,11 @@ const AdminUsersPage: React.FC = () => {
         page: currentPage,
         limit: 20,
         search: searchTerm,
-        role: filters.role,
-        isEmailVerified: filters.isEmailVerified === 'true' ? true : filters.isEmailVerified === 'false' ? false : undefined,
-        isActive: filters.isActive === 'true' ? true : filters.isActive === 'false' ? false : undefined,
-        sortBy: filters.sortBy,
-        sortOrder: filters.sortOrder
+        role: filters.role || undefined,
+        isEmailVerified: filters.isEmailVerified ? filters.isEmailVerified === 'true' : undefined,
+        isActive: filters.isActive ? filters.isActive === 'true' : undefined,
+        sortBy: filters.sortBy || undefined,
+        sortOrder: filters.sortOrder || undefined
       });
       setUsers(response.data);
       setPagination(response.pagination);
@@ -167,7 +167,7 @@ const AdminUsersPage: React.FC = () => {
     }
   };
 
-  const handleBulkOperation = async (operation: string, data?: any) => {
+  const handleBulkOperation = async (operation: 'delete' | 'activate' | 'deactivate' | 'changeRole', data?: any) => {
     if (selectedUsers.length === 0) {
       toast.error('Please select users first');
       return;
@@ -179,7 +179,7 @@ const AdminUsersPage: React.FC = () => {
 
     try {
       await adminApi.bulkUserOperations({
-        operation: operation as any,
+        operation,
         userIds: selectedUsers,
         data
       });

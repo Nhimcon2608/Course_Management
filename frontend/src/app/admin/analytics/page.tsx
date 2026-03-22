@@ -28,7 +28,7 @@ const AdminAnalyticsPage: React.FC = () => {
   const router = useRouter();
   const { user, isAuthenticated } = useAuth();
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState<string>('overview');
+  const [activeTab, setActiveTab] = useState<'overview' | 'revenue' | 'users' | 'courses' | 'system'>('overview');
   const [dateRange, setDateRange] = useState({
     startDate: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
     endDate: new Date().toISOString().split('T')[0]
@@ -58,7 +58,7 @@ const AdminAnalyticsPage: React.FC = () => {
         startDate: dateRange.startDate,
         endDate: dateRange.endDate,
         period,
-        type: activeTab as any
+        type: activeTab
       });
 
       if (!response || !response.analytics) {
@@ -92,11 +92,11 @@ const AdminAnalyticsPage: React.FC = () => {
   };
 
   const tabs = [
-    { id: 'overview', name: 'Overview', icon: BarChart3 },
-    { id: 'revenue', name: 'Revenue', icon: DollarSign },
-    { id: 'users', name: 'Users', icon: Users },
-    { id: 'courses', name: 'Courses', icon: BookOpen },
-    { id: 'system', name: 'System', icon: Server }
+    { id: 'overview' as const, name: 'Overview', icon: BarChart3 },
+    { id: 'revenue' as const, name: 'Revenue', icon: DollarSign },
+    { id: 'users' as const, name: 'Users', icon: Users },
+    { id: 'courses' as const, name: 'Courses', icon: BookOpen },
+    { id: 'system' as const, name: 'System', icon: Server }
   ];
 
   if (!isAuthenticated || !user || user.role !== 'admin') {

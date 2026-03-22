@@ -185,7 +185,7 @@ const CourseDetailPage: React.FC = () => {
                 <h1 className="text-3xl font-bold text-gray-900">{course.title}</h1>
                 {getStatusBadge(course)}
               </div>
-              <p className="text-gray-600 mb-4">{(course as any).shortDescription}</p>
+              <p className="text-gray-600 mb-4">{course.description}</p>
               <div className="flex items-center space-x-6 text-sm text-gray-500">
                 <div className="flex items-center">
                   <Calendar className="w-4 h-4 mr-1" />

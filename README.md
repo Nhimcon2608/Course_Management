@@ -62,29 +62,67 @@ quan-ly-khoa-hoc/
 - npm >= 9.0.0
 - MongoDB >= 6.0
 
-### 1. Clone repository
+### IDE và công cụ phát triển đề xuất
+
+#### IDE và Extensions
+- **Visual Studio Code** - IDE đề xuất với các extensions:
+  - ESLint - Kiểm tra lỗi code
+  - Prettier - Format code
+  - Tailwind CSS IntelliSense - Gợi ý class Tailwind
+  - MongoDB for VS Code - Quản lý MongoDB
+  - Thunder Client/Postman - Test API
+  - GitLens - Tích hợp Git nâng cao
+
+#### Công cụ phát triển
+- **MongoDB Compass** - GUI cho MongoDB
+- **Docker Desktop** - Nếu sử dụng Docker
+- **Git** - Quản lý phiên bản
+
+#### Cài đặt TypeScript và các công cụ toàn cục
 ```bash
-git clone <repository-url>
-cd quan-ly-khoa-hoc
+# Cài đặt TypeScript toàn cục
+npm install -g typescript
+
+# Cài đặt ts-node để chạy TypeScript trực tiếp
+npm install -g ts-node
+
+# Cài đặt nodemon để tự động khởi động lại server khi có thay đổi
+npm install -g nodemon
+```
+
+### 1. Cài đặt và cấu hình môi trường
+
+#### Cài đặt MongoDB
+```bash
+# Windows: Tải và cài đặt MongoDB Community Server từ trang chủ
+# https://www.mongodb.com/try/download/community
+
+# Hoặc sử dụng Docker
+docker run --name mongodb -d -p 27017:27017 mongo:latest
+```
+
+#### Cấu hình môi trường
+```bash
+# Tạo file .env từ file mẫu
+cp backend/.env.example backend/.env
+cp frontend/.env.example frontend/.env.local
+
+# Chỉnh sửa các biến môi trường theo cấu hình của bạn
 ```
 
 ### 2. Cài đặt dependencies
 ```bash
+# Cài đặt dependencies cho cả project
 npm install
+
+# Hoặc cài đặt riêng cho từng phần
+cd frontend && npm install
+cd backend && npm install
 ```
 
-### 3. Cấu hình môi trường
+### 3. Chạy dự án
 ```bash
-# Copy file cấu hình mẫu
-cp backend/.env.example backend/.env
-cp frontend/.env.example frontend/.env.local
-
-# Chỉnh sửa các biến môi trường theo môi trường của bạn
-```
-
-### 4. Chạy dự án
-```bash
-# Chạy cả frontend và backend
+# Chạy cả frontend và backend từ thư mục gốc
 npm run dev
 
 # Hoặc chạy riêng lẻ
@@ -92,29 +130,81 @@ npm run dev:backend
 npm run dev:frontend
 ```
 
-### 5. Truy cập ứng dụng
+### 4. Truy cập ứng dụng
 - Frontend: http://localhost:3000
 - Backend API: http://localhost:5000
 - API Documentation: http://localhost:5000/api-docs
 
-## 🧪 Testing
+## 🌱 Seed dữ liệu
+
+Cấu hình `MONGODB_URI` trong file `.env` (mặc định: `mongodb://localhost:27017/quan-ly-khoa-hoc`)
+
+### Các lệnh seed dữ liệu
 
 ```bash
-# Chạy tất cả tests
-npm test
+# Di chuyển vào thư mục backend
+cd backend
 
-# Chạy tests với coverage
-npm run test:coverage
+# Seed dữ liệu cơ bản (users, categories, courses)
+npm run seed
 
-# Chạy tests ở watch mode
-npm run test:watch
+# Seed dữ liệu mở rộng (reviews, orders, progress)
+npm run seed:extended
+
+# Seed mã giảm giá
+npm run seed:coupons
+
+# Seed tất cả dữ liệu cùng lúc
+npm run seed:all
+
+# Seed dữ liệu trong môi trường development
+npm run seed:dev
 ```
 
-## 📚 Tài liệu API
+### Dữ liệu được tạo
+
+- **Users**: Admin, giảng viên và học viên với mật khẩu mặc định `123456`
+- **Categories**: Các danh mục khóa học
+- **Courses**: Các khóa học mẫu với nội dung, giá cả và thông tin chi tiết
+- **Reviews**: Đánh giá mẫu cho các khóa học
+- **Orders**: Đơn hàng mẫu
+- **Progress**: Tiến độ học tập mẫu
+- **Coupons**: Mã giảm giá mẫu
+
+### Migrate dữ liệu
+
+Nếu cần migrate dữ liệu wishlist từ cấu trúc cũ sang cấu trúc mới:
+
+```bash
+npm run migrate:wishlist
+```
+
+## 📚 Tài liệu và tham khảo
+
+### Tài liệu API
 
 API documentation được tạo tự động bằng Swagger và có thể truy cập tại:
 - Development: http://localhost:5000/api-docs
 - Production: [URL production]/api-docs
+
+### Tài liệu framework và thư viện
+
+#### Frontend
+- [Next.js Documentation](https://nextjs.org/docs) - Framework React
+- [React Documentation](https://reactjs.org/docs/getting-started.html) - Thư viện UI
+- [TypeScript Documentation](https://www.typescriptlang.org/docs/) - JavaScript với kiểu dữ liệu
+- [Tailwind CSS](https://tailwindcss.com/docs) - Framework CSS
+- [React Query](https://tanstack.com/query/latest/docs/react/overview) - Quản lý state từ server
+- [Zustand](https://docs.pmnd.rs/zustand/getting-started/introduction) - Quản lý state
+- [React Hook Form](https://react-hook-form.com/get-started) - Quản lý form
+
+#### Backend
+- [Node.js Documentation](https://nodejs.org/en/docs/) - Runtime JavaScript
+- [Express.js Documentation](https://expressjs.com/) - Web framework
+- [MongoDB Documentation](https://docs.mongodb.com/) - Cơ sở dữ liệu NoSQL
+- [Mongoose Documentation](https://mongoosejs.com/docs/guide.html) - ODM cho MongoDB
+- [JWT](https://jwt.io/introduction/) - JSON Web Token
+- [Swagger](https://swagger.io/docs/) - API Documentation
 
 ## 🚀 Deployment
 
@@ -162,23 +252,3 @@ quan-ly-khoa-hoc/
 └── docs/                  # Documentation
 ```
 
-## 🤝 Đóng góp
-
-1. Fork dự án
-2. Tạo feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to branch (`git push origin feature/AmazingFeature`)
-5. Tạo Pull Request
-
-## 📄 License
-
-Dự án này được phân phối dưới MIT License. Xem file `LICENSE` để biết thêm chi tiết.
-
-## 📞 Liên hệ
-
-- Email: [your-email@example.com]
-- GitHub: [your-github-username]
-
----
-
-⭐ Nếu dự án này hữu ích, hãy cho chúng tôi một star!

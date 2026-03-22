@@ -104,10 +104,7 @@ const InstructorAnalyticsPage: React.FC = () => {
   };
 
   const getTotalRevenue = () => {
-    // Use totalRevenue from analytics if available (all-time), otherwise sum revenueData (period-specific)
-    if ((analytics as any)?.totalRevenue !== undefined) {
-      return (analytics as any).totalRevenue;
-    }
+    // Sum revenueData for period-specific revenue
     if (!analytics?.revenueData) return 0;
     return analytics.revenueData.reduce((sum, item) => sum + item.revenue, 0);
   };
@@ -211,18 +208,10 @@ const InstructorAnalyticsPage: React.FC = () => {
               <div className="ml-4">
                 <p className="text-sm font-medium text-gray-600">
                   Total Revenue
-                  {(analytics as any)?.totalRevenue !== undefined && (
-                    <span className="text-xs text-gray-500 ml-1">(All-time)</span>
-                  )}
                 </p>
                 <p className="text-2xl font-bold text-gray-900">
                   {formatCurrency(getTotalRevenue())}
                 </p>
-                {(analytics as any)?.period && analytics?.revenueData && (
-                  <p className="text-xs text-gray-500 mt-1">
-                    Period ({(analytics as any).period}): {formatCurrency(analytics.revenueData.reduce((sum, item) => sum + item.revenue, 0))}
-                  </p>
-                )}
               </div>
             </div>
           </div>

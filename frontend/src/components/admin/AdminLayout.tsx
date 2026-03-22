@@ -86,7 +86,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
       name: 'Settings',
       href: '/admin/settings',
       icon: Settings,
-      current: pathname?.startsWith('/admin/settings') || false
+      current: pathname?.startsWith('/admin/settings')
     }
   ];
 

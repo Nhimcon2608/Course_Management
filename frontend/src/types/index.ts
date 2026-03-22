@@ -131,8 +131,6 @@ export interface Review {
 
 
 
-
-
 // Cart Types
 export interface Cart {
   _id: string;

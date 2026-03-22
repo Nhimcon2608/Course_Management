@@ -1,6 +1,3 @@
-// Setup module aliases for production
-import 'module-alias/register';
-
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
@@ -28,6 +25,7 @@ import orderRoutes from '@/routes/orders';
 import dashboardRoutes from '@/routes/dashboard';
 import learningRoutes from '@/routes/learning';
 import instructorRoutes from '@/routes/instructor';
+import instructorsRoutes from '@/routes/instructors';
 import notificationRoutes from '@/routes/notifications';
 import adminRoutes from '@/routes/admin';
 
@@ -134,6 +132,7 @@ app.use('/api/coupons', couponRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/learning', learningRoutes);
 app.use('/api/instructor', instructorRoutes);
+app.use('/api/instructors', instructorsRoutes);
 app.use('/api/notifications', notificationRoutes);
 app.use('/api/admin', adminRoutes);
 

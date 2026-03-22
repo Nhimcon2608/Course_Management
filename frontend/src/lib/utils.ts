@@ -23,13 +23,20 @@ export function formatCurrency(amount: number, currency: string = 'USD'): string
  */
 export function formatDate(date: string | Date, options?: Intl.DateTimeFormatOptions): string {
   const dateObj = typeof date === 'string' ? new Date(date) : date;
-  
+
   return new Intl.DateTimeFormat('en-US', {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
     ...options,
   }).format(dateObj);
+}
+
+/**
+ * Format number consistently for SSR/CSR
+ */
+export function formatNumber(num: number, locale: string = 'en-US'): string {
+  return new Intl.NumberFormat(locale).format(num);
 }
 
 /**

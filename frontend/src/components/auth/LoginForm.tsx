@@ -4,9 +4,9 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { useForm } from 'react-hook-form';
-import { Eye, EyeOff, Mail, Lock, AlertCircle, CheckCircle } from 'lucide-react';
+import { Eye, EyeOff, Mail, AlertCircle } from 'lucide-react';
 import toast from 'react-hot-toast';
-import { useAuthActions, useAuth, useAuthStore } from '@/store/authStore';
+import { useAuthActions, useAuth } from '@/store/authStore';
 import { LoginCredentials } from '@/types';
 import Button from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
@@ -37,9 +37,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ redirectTo }) => {
     register,
     handleSubmit,
     formState: { errors },
-    setError,
-    watch,
-    setValue
+    setError
   } = useForm<LoginFormData>({
     defaultValues: {
       email: '',
@@ -56,7 +54,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ redirectTo }) => {
   // Redirect if already authenticated with role-based routing
   useEffect(() => {
     if (isAuthenticated && user) {
-      let destination = redirectTo || (searchParams ? searchParams.get('redirect') : null);
+      let destination = redirectTo || searchParams?.get('redirect');
 
       // If no specific destination, redirect based on user role
       if (!destination) {
@@ -119,7 +117,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ redirectTo }) => {
       console.log('🔄 Triggering auth state update...');
 
       // Determine redirect destination based on user role from login response
-      let destination = redirectTo || (searchParams ? searchParams.get('redirect') : null);
+      let destination = redirectTo || searchParams?.get('redirect');
 
       // If no specific destination, redirect based on role
       if (!destination) {
@@ -129,7 +127,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ redirectTo }) => {
           loginResponse: (loginResponse as any)?.user,
           userRole,
           redirectTo,
-          searchParamsRedirect: searchParams ? searchParams.get('redirect') : null
+          searchParamsRedirect: searchParams?.get('redirect')
         });
 
         destination = userRole === 'admin'

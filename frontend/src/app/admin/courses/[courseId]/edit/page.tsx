@@ -102,10 +102,10 @@ const EditCoursePage: React.FC = () => {
       return;
     }
 
-    if (params?.courseId) {
+    if (params && params.courseId) {
       fetchCourseData();
     }
-  }, [isAuthenticated, user, router, params?.courseId]);
+  }, [isAuthenticated, user, router, params]);
 
   const fetchCourseData = async () => {
     try {
@@ -122,43 +122,46 @@ const EditCoursePage: React.FC = () => {
       console.log('Instructors response:', instructorsRes);
 
       const courseData = courseRes?.data || courseRes;
-      if (!courseData) {
+      if (!courseData || typeof courseData !== 'object' || !('_id' in courseData)) {
         toast.error('Course not found');
         router.push('/admin/courses');
         return;
       }
 
-      setCourse(courseData as any);
+      const course = courseData as Course;
+      setCourse(course);
       setFormData({
-        ...courseData,
-        category: (courseData as any).category?._id || '',
-        instructor: (courseData as any).instructor?._id || ''
+        ...course,
+        category: course.category?._id || '',
+        instructor: course.instructor?._id || ''
       });
 
       // Handle categories response - check multiple possible response structures
-      let categoriesData = [];
-      if ((categoriesRes as any)?.data?.categories) {
-        categoriesData = (categoriesRes as any).data.categories;
-      } else if ((categoriesRes as any)?.categories) {
-        categoriesData = (categoriesRes as any).categories;
-      } else if (Array.isArray((categoriesRes as any)?.data)) {
-        categoriesData = (categoriesRes as any).data;
-      } else if (Array.isArray(categoriesRes)) {
-        categoriesData = categoriesRes as any;
+      let categoriesData: any[] = [];
+      const catRes = categoriesRes as any;
+      if (catRes?.data?.categories) {
+        categoriesData = catRes.data.categories;
+      } else if (catRes?.categories) {
+        categoriesData = catRes.categories;
+      } else if (Array.isArray(catRes?.data)) {
+        categoriesData = catRes.data;
+      } else if (Array.isArray(catRes)) {
+        categoriesData = catRes;
       }
 
       setCategories(categoriesData);
 
       // Handle instructors response - check multiple possible response structures
-      let instructorsData = [];
-      if ((instructorsRes as any)?.data?.users) {
-        instructorsData = (instructorsRes as any).data.users;
-      } else if ((instructorsRes as any)?.users) {
-        instructorsData = (instructorsRes as any).users;
-      } else if (Array.isArray((instructorsRes as any)?.data)) {
-        instructorsData = (instructorsRes as any).data;
-      } else if (Array.isArray(instructorsRes)) {
-        instructorsData = instructorsRes as any;
+      let instructorsData: any[] = [];
+      const instRes = instructorsRes as any;
+      if (instRes?.data?.users) {
+        instructorsData = instRes.data.users;
+      } else if (instRes?.users) {
+        instructorsData = instRes.users;
+      } else if (Array.isArray(instRes?.data)) {
+        instructorsData = instRes.data;
+      } else if (Array.isArray(instRes)) {
+        instructorsData = instRes;
       }
 
       setInstructors(instructorsData);
@@ -649,7 +652,7 @@ const EditCoursePage: React.FC = () => {
                     type="text"
                     value={newTag}
                     onChange={(e) => setNewTag(e.target.value)}
-                    onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addTag())}
+                    onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), addTag())}
                     className="flex-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                     placeholder="Add a tag"
                   />
@@ -690,7 +693,7 @@ const EditCoursePage: React.FC = () => {
                     type="text"
                     value={newRequirement}
                     onChange={(e) => setNewRequirement(e.target.value)}
-                    onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addRequirement())}
+                    onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), addRequirement())}
                     className="flex-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                     placeholder="Add a requirement"
                   />
@@ -728,7 +731,7 @@ const EditCoursePage: React.FC = () => {
                     type="text"
                     value={newLearningPoint}
                     onChange={(e) => setNewLearningPoint(e.target.value)}
-                    onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addLearningPoint())}
+                    onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), addLearningPoint())}
                     className="flex-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                     placeholder="Add a learning outcome"
                   />
@@ -947,7 +950,7 @@ const EditCoursePage: React.FC = () => {
                     <span>Final Price:</span>
                     <span className="text-blue-600">
                       {formData.discountPrice || formData.price ?
-                        formatCurrency((formData.discountPrice || formData.price) as number) : 'Not set'}
+                        formatCurrency(formData.discountPrice || formData.price || 0) : 'Not set'}
                     </span>
                   </div>
                 </div>

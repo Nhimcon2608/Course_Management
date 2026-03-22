@@ -7,7 +7,7 @@ import { Eye, EyeOff, CheckCircle, AlertCircle, Loader } from 'lucide-react';
 import toast from 'react-hot-toast';
 import Button from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
-import { ResetPasswordData, VerifyTokenResponse } from '@/types';
+import { ResetPasswordData } from '@/types';
 
 interface ResetPasswordFormData {
   password: string;
@@ -243,6 +243,7 @@ const ResetPasswordForm: React.FC = () => {
               type={showPassword ? 'text' : 'password'}
               autoComplete="new-password"
               placeholder="Enter your new password"
+
               {...register('password', {
                 required: 'Password is required',
                 minLength: {
@@ -282,6 +283,7 @@ const ResetPasswordForm: React.FC = () => {
               type={showConfirmPassword ? 'text' : 'password'}
               autoComplete="new-password"
               placeholder="Confirm your new password"
+
               {...register('confirmPassword', {
                 required: 'Please confirm your password',
                 validate: (value) => value === password || 'Passwords do not match'

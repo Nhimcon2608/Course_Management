@@ -45,9 +45,9 @@ export const findCourseByIdOrSlug = async (identifier: string, additionalFilter:
  */
 export const getCourseObjectId = async (identifier: string): Promise<mongoose.Types.ObjectId | null> => {
   try {
-    const course = await findCourseByIdOrSlug(identifier, { 
-      isPublished: true, 
-      status: 'published' 
+    const course = await findCourseByIdOrSlug(identifier, {
+      isPublished: true,
+      status: 'published'
     });
     return course ? new mongoose.Types.ObjectId(course._id) : null;
   } catch (error) {

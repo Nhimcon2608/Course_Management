@@ -104,12 +104,12 @@ class LessonAPI {
   // Lesson Management
   async getLessons(courseId: string): Promise<{ lessons: Lesson[]; total: number }> {
     const response = await apiClient.get(`${this.baseUrl}/courses/${courseId}/lessons`);
+    
     const data = response.data as any;
-
     if (data && data.data) {
-      return data.data;
+      return data.data as { lessons: Lesson[]; total: number };
     } else if (data && Array.isArray(data.lessons)) {
-      return data;
+      return data as { lessons: Lesson[]; total: number };
     } else {
       throw new Error('Invalid response format');
     }
@@ -117,12 +117,12 @@ class LessonAPI {
 
   async getLesson(courseId: string, lessonId: string): Promise<Lesson> {
     const response = await apiClient.get(`${this.baseUrl}/courses/${courseId}/lessons/${lessonId}`);
+    
     const data = response.data as any;
-
     if (data && data.data) {
-      return data.data;
+      return data.data as Lesson;
     } else if (data && data._id) {
-      return data;
+      return data as Lesson;
     } else {
       throw new Error('Invalid response format');
     }
@@ -130,12 +130,12 @@ class LessonAPI {
 
   async createLesson(courseId: string, lessonData: CreateLessonData): Promise<Lesson> {
     const response = await apiClient.post(`${this.baseUrl}/courses/${courseId}/lessons`, lessonData);
+    
     const data = response.data as any;
-
     if (data && data.data) {
-      return data.data;
+      return data.data as Lesson;
     } else if (data && data._id) {
-      return data;
+      return data as Lesson;
     } else {
       throw new Error('Invalid response format');
     }
@@ -143,12 +143,12 @@ class LessonAPI {
 
   async updateLesson(courseId: string, lessonId: string, lessonData: UpdateLessonData): Promise<Lesson> {
     const response = await apiClient.put(`${this.baseUrl}/courses/${courseId}/lessons/${lessonId}`, lessonData);
+    
     const data = response.data as any;
-
     if (data && data.data) {
-      return data.data;
+      return data.data as Lesson;
     } else if (data && data._id) {
-      return data;
+      return data as Lesson;
     } else {
       throw new Error('Invalid response format');
     }
@@ -220,12 +220,12 @@ class LessonAPI {
       `${this.baseUrl}/courses/${courseId}/lessons/${lessonId}/video/metadata`,
       metadata
     );
-    const data = response.data as any;
 
+    const data = response.data as any;
     if (data && data.data) {
-      return data.data;
+      return data.data as Lesson;
     } else if (data && data._id) {
-      return data;
+      return data as Lesson;
     } else {
       throw new Error('Invalid response format');
     }
@@ -248,12 +248,12 @@ class LessonAPI {
   // Assignment Management
   async getAssignments(courseId: string, lessonId: string): Promise<{ assignments: Assignment[]; total: number }> {
     const response = await apiClient.get(`${this.baseUrl}/courses/${courseId}/lessons/${lessonId}/assignments`);
+    
     const data = response.data as any;
-
     if (data && data.data) {
-      return data.data;
+      return data.data as { assignments: Assignment[]; total: number };
     } else if (data && Array.isArray(data.assignments)) {
-      return data;
+      return data as { assignments: Assignment[]; total: number };
     } else {
       throw new Error('Invalid response format');
     }
@@ -275,12 +275,12 @@ class LessonAPI {
       `${this.baseUrl}/courses/${courseId}/lessons/${lessonId}/assignments`,
       assignmentData
     );
-    const data = response.data as any;
 
+    const data = response.data as any;
     if (data && data.data) {
-      return data.data;
+      return data.data as Assignment;
     } else if (data && data._id) {
-      return data;
+      return data as Assignment;
     } else {
       throw new Error('Invalid response format');
     }
@@ -291,12 +291,12 @@ class LessonAPI {
       `${this.baseUrl}/courses/${courseId}/assignments/${assignmentId}`,
       assignmentData
     );
+    
     const data = response.data as any;
-
     if (data && data.data) {
-      return data.data;
+      return data.data as Assignment;
     } else if (data && data._id) {
-      return data;
+      return data as Assignment;
     } else {
       throw new Error('Invalid response format');
     }

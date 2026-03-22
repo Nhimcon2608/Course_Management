@@ -346,23 +346,26 @@ export default function CheckoutPage() {
 
               {/* Cart Items */}
               <div className="space-y-4 mb-6">
-                {cart.items.map((item) => (
-                  <div key={(item.course as any)._id} className="flex items-center space-x-3">
-                    <img
-                      src={(item.course as any).thumbnail || '/placeholder-course.jpg'}
-                      alt={(item.course as any).title}
-                      className="w-12 h-12 rounded object-cover"
-                    />
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium text-gray-900 truncate">
-                        {(item.course as any).title}
-                      </p>
-                      <p className="text-sm text-gray-500">
-                        {formatPrice(item.price)}
-                      </p>
+                {cart.items.map((item) => {
+                  const course = typeof item.course === 'string' ? { _id: item.course, title: 'Course', thumbnail: '' } : item.course;
+                  return (
+                    <div key={course._id} className="flex items-center space-x-3">
+                      <img
+                        src={course.thumbnail || '/placeholder-course.jpg'}
+                        alt={course.title}
+                        className="w-12 h-12 rounded object-cover"
+                      />
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-medium text-gray-900 truncate">
+                          {course.title}
+                        </p>
+                        <p className="text-sm text-gray-500">
+                          {formatPrice(item.price)}
+                        </p>
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
 
               {/* Price Summary */}

@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { toast } from 'react-hot-toast';
-import { useAuthStore, useAuthActions } from '@/store/authStore';
+import { useAuthStore } from '@/store/authStore';
 import { 
   Mail, 
   Edit, 
@@ -21,7 +21,6 @@ const EmailUpdateSection: React.FC<EmailUpdateSectionProps> = ({
   className = '' 
 }) => {
   const { user } = useAuthStore();
-  const { updateProfile } = useAuthActions();
   const [isEditing, setIsEditing] = useState(false);
   const [newEmail, setNewEmail] = useState('');
   const [isUpdating, setIsUpdating] = useState(false);
@@ -79,11 +78,7 @@ const EmailUpdateSection: React.FC<EmailUpdateSectionProps> = ({
       const data = await response.json();
 
       if (data.success) {
-        // Update user in auth store
-        await updateProfile({
-          email: newEmail.toLowerCase().trim(),
-          isEmailVerified: false // Reset verification status
-        });
+        // Note: User will need to re-login to see updated email in auth store
 
         toast.success('Email updated successfully! Please verify your new email address.');
         setIsEditing(false);

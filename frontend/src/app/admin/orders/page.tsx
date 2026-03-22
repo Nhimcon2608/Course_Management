@@ -302,7 +302,10 @@ const AdminOrdersPage: React.FC = () => {
                             {order.courses.length} course{order.courses.length > 1 ? 's' : ''}
                           </div>
                           <div className="text-sm text-gray-500">
-                            {order.courses.slice(0, 2).map(item => item.course.title).join(', ')}
+                            {order.courses.slice(0, 2)
+                              .filter(item => item.course && item.course.title)
+                              .map(item => item.course.title)
+                              .join(', ')}
                             {order.courses.length > 2 && ` +${order.courses.length - 2} more`}
                           </div>
                         </td>
@@ -496,15 +499,17 @@ const AdminOrdersPage: React.FC = () => {
                 <div className="mt-6">
                   <h4 className="font-medium text-gray-900 mb-2">Courses ({showOrderDetails.courses.length})</h4>
                   <div className="bg-gray-50 p-4 rounded-lg">
-                    {showOrderDetails.courses.map((item, index) => (
+                    {showOrderDetails.courses
+                      .filter(item => item.course && item.course.title)
+                      .map((item, index) => (
                       <div key={index} className="flex items-center justify-between py-2 border-b border-gray-200 last:border-b-0">
                         <div className="flex items-center">
                           <img
-                            src={item.course.thumbnail || 'https://via.placeholder.com/400x300/3B82F6/FFFFFF?text=Course'}
-                            alt={item.course.title}
+                            src={item.course?.thumbnail || 'https://via.placeholder.com/400x300/3B82F6/FFFFFF?text=Course'}
+                            alt={item.course?.title || 'Course'}
                             className="w-12 h-12 rounded-lg object-cover mr-3"
                           />
-                          <span className="text-sm font-medium">{item.course.title}</span>
+                          <span className="text-sm font-medium">{item.course?.title || 'Unknown Course'}</span>
                         </div>
                         <span className="text-sm font-medium">{formatCurrency(item.price)}</span>
                       </div>

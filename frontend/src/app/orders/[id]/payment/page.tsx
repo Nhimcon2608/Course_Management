@@ -48,7 +48,7 @@ export default function PaymentPage() {
 
   useEffect(() => {
     // Auto-check payment status for processing payments
-    if ((currentOrder as any)?.paymentStatus === 'processing') {
+    if ((currentOrder?.paymentStatus as any) === 'processing') {
       const interval = setInterval(() => {
         handleCheckStatus();
       }, 10000); // Check every 10 seconds
@@ -114,7 +114,7 @@ export default function PaymentPage() {
   };
 
   const getStatusIcon = () => {
-    switch ((currentOrder as any)?.paymentStatus) {
+    switch (currentOrder?.paymentStatus as any) {
       case 'paid':
         return <CheckCircle className="h-16 w-16 text-green-500" />;
       case 'failed':
@@ -127,7 +127,7 @@ export default function PaymentPage() {
   };
 
   const getStatusMessage = () => {
-    switch ((currentOrder as any)?.paymentStatus) {
+    switch (currentOrder?.paymentStatus as any) {
       case 'paid':
         return {
           title: 'Payment Successful!',
@@ -215,7 +215,7 @@ export default function PaymentPage() {
 
               {/* Action Buttons */}
               <div className="space-y-4">
-                {currentOrder.paymentStatus === 'pending' && (currentOrder as any).paymentMethod === 'zalopay' && (
+                {currentOrder.paymentStatus === 'pending' && (currentOrder.paymentMethod as any) === 'zalopay' && (
                   <button
                     onClick={handleCreateZaloPayPayment}
                     disabled={isCreatingPayment}
@@ -245,7 +245,7 @@ export default function PaymentPage() {
                   </button>
                 )}
 
-                {(currentOrder as any).paymentStatus === 'processing' && (
+                {(currentOrder.paymentStatus as any) === 'processing' && (
                   <button
                     onClick={handleCheckStatus}
                     disabled={isCheckingStatus}
@@ -265,7 +265,7 @@ export default function PaymentPage() {
                   </button>
                 )}
 
-                {currentOrder.paymentStatus === 'paid' && (
+                {(currentOrder.paymentStatus as any) === 'paid' && (
                   <button
                     onClick={() => router.push('/dashboard')}
                     className="w-full bg-green-600 text-white py-3 px-6 rounded-md hover:bg-green-700"
@@ -274,7 +274,7 @@ export default function PaymentPage() {
                   </button>
                 )}
 
-                {currentOrder.paymentStatus === 'failed' && (currentOrder as any).paymentMethod === 'zalopay' && (
+                {currentOrder.paymentStatus === 'failed' && (currentOrder.paymentMethod as any) === 'zalopay' && (
                   <button
                     onClick={handleCreateZaloPayPayment}
                     disabled={isCreatingPayment}
@@ -293,7 +293,7 @@ export default function PaymentPage() {
               </div>
 
               {/* Auto-refresh notice */}
-              {(currentOrder as any).paymentStatus === 'processing' && (
+              {(currentOrder.paymentStatus as any) === 'processing' && (
                 <p className="text-sm text-gray-500 mt-4">
                   Payment status will be checked automatically every 10 seconds
                 </p>
@@ -308,7 +308,7 @@ export default function PaymentPage() {
               
               <div className="space-y-4 mb-6">
                 {currentOrder.courses.map((item, index) => (
-                  <div key={index} className="flex items-center space-x-3">
+                  <div key={typeof item.course === 'string' ? item.course : item.course._id || index} className="flex items-center space-x-3">
                     <img
                       src={item.thumbnail || '/placeholder-course.jpg'}
                       alt={item.title}

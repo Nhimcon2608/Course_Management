@@ -236,8 +236,8 @@ const CategoryCoursesPage: React.FC = () => {
                 {index === categoryPath.length - 1 ? (
                   <span className="text-gray-900">{pathItem.name}</span>
                 ) : (
-                  <Link 
-                    href={`/categories/${pathItem._id}`} 
+                  <Link
+                    href={`/categories/${pathItem.slug || pathItem._id}`}
                     className="hover:text-primary-600"
                   >
                     {pathItem.name}
@@ -378,7 +378,7 @@ const CategoryCoursesPage: React.FC = () => {
               {courses.map((course) => (
                 <Link
                   key={course._id}
-                  href={`/courses/${course._id}`}
+                  href={`/courses/${course.slug || course._id}`}
                   className={`bg-white rounded-lg shadow hover:shadow-lg transition-shadow overflow-hidden ${
                     viewMode === 'list' ? 'flex' : ''
                   }`}

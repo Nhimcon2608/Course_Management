@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-const BACKEND_URL = process.env.BACKEND_URL || process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5000';
+const BACKEND_URL = process.env.BACKEND_URL || 'http://localhost:5000';
 
 // Temporary mock data for testing when backend is unavailable
 const MOCK_USERS: Record<string, any> = {
@@ -31,58 +31,42 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const { email, password, rememberMe = false } = body;
 
-    // Validate input
-    if (!email || !password) {
-      return NextResponse.json(
-        { success: false, message: 'Email and password are required' },
-        { status: 400 }
-      );
-    }
+    // Try backend first
+    try {
+      console.log('🔄 Attempting backend login:', `${BACKEND_URL}/api/auth/login`);
 
-    // In production or when backend is not available, use mock authentication
-    const isProduction = process.env.NODE_ENV === 'production';
-    const hasBackend = process.env.BACKEND_URL || process.env.NEXT_PUBLIC_BACKEND_URL;
+      const response = await fetch(`${BACKEND_URL}/api/auth/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Origin': request.headers.get('origin') || 'http://localhost:3001',
+          'User-Agent': request.headers.get('user-agent') || 'NextJS-Proxy',
+        },
+        body: JSON.stringify(body),
+      });
 
-    if (!isProduction && hasBackend) {
-      // Try backend first only in development with backend URL
-      try {
-        console.log('🔄 Attempting backend login:', `${BACKEND_URL}/api/auth/login`);
+      console.log('📡 Backend response status:', response.status);
 
-        const response = await fetch(`${BACKEND_URL}/api/auth/login`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Origin': request.headers.get('origin') || 'http://localhost:3001',
-            'User-Agent': request.headers.get('user-agent') || 'NextJS-Proxy',
-          },
-          body: JSON.stringify(body),
-        });
+      if (response.ok) {
+        const responseText = await response.text();
+        const data = responseText ? JSON.parse(responseText) : {};
 
-        console.log('📡 Backend response status:', response.status);
+        const nextResponse = NextResponse.json(data, { status: response.status });
 
-        if (response.ok) {
-          const responseText = await response.text();
-          const data = responseText ? JSON.parse(responseText) : {};
-
-          const nextResponse = NextResponse.json(data, { status: response.status });
-
-          // Forward cookies from backend
-          const setCookieHeaders = response.headers.getSetCookie?.() || [];
-          if (setCookieHeaders.length > 0) {
-            console.log('🍪 Setting cookies from backend:', setCookieHeaders.length);
-            setCookieHeaders.forEach(cookie => {
-              nextResponse.headers.append('Set-Cookie', cookie);
-            });
-          }
-
-          console.log('✅ Backend login successful');
-          return nextResponse;
+        // Forward cookies from backend
+        const setCookieHeaders = response.headers.getSetCookie?.() || [];
+        if (setCookieHeaders.length > 0) {
+          console.log('🍪 Setting cookies from backend:', setCookieHeaders.length);
+          setCookieHeaders.forEach(cookie => {
+            nextResponse.headers.append('Set-Cookie', cookie);
+          });
         }
-      } catch (backendError) {
-        console.warn('⚠️ Backend unavailable, using mock authentication:', (backendError as Error).message);
+
+        console.log('✅ Backend login successful');
+        return nextResponse;
       }
-    } else {
-      console.log('🔄 Using mock authentication (production mode or no backend configured)');
+    } catch (backendError) {
+      console.warn('⚠️ Backend unavailable, using mock authentication:', (backendError as Error).message);
     }
 
     // Fallback to mock authentication
@@ -141,7 +125,7 @@ export async function POST(request: NextRequest) {
   }
 }
 
-export async function OPTIONS() {
+export async function OPTIONS(request: NextRequest) {
   return new NextResponse(null, {
     status: 200,
     headers: {

@@ -91,7 +91,7 @@ const EditCoursePage: React.FC = () => {
         setFormData({
           title: course.title || '',
           description: course.description || '',
-          shortDescription: (course as any).shortDescription || '',
+          shortDescription: '',
           price: course.price || 0,
           originalPrice: course.originalPrice || 0,
           category: course.category?._id || '',
@@ -164,16 +164,16 @@ const EditCoursePage: React.FC = () => {
     // Description validation
     if (!formData.description?.trim()) {
       errors.push('Mô tả khóa học là bắt buộc');
-    } else if (formData.description?.trim().length < 50) {
+    } else if (formData.description.trim().length < 50) {
       errors.push('Mô tả khóa học phải có ít nhất 50 ký tự');
     }
 
     // Short description validation
     if (!formData.shortDescription?.trim()) {
       errors.push('Mô tả ngắn là bắt buộc');
-    } else if (formData.shortDescription?.trim().length < 20) {
+    } else if (formData.shortDescription.trim().length < 20) {
       errors.push('Mô tả ngắn phải có ít nhất 20 ký tự');
-    } else if (formData.shortDescription?.trim().length > 500) {
+    } else if (formData.shortDescription.trim().length > 500) {
       errors.push('Mô tả ngắn không được vượt quá 500 ký tự');
     }
 
@@ -193,7 +193,7 @@ const EditCoursePage: React.FC = () => {
     }
 
     // Thumbnail validation
-    if (!formData.thumbnail || !formData.thumbnail?.trim()) {
+    if (!formData.thumbnail || !formData.thumbnail.trim()) {
       errors.push('Ảnh thumbnail là bắt buộc');
     }
 
@@ -330,7 +330,7 @@ const EditCoursePage: React.FC = () => {
                     </label>
                     <input
                       type="text"
-                      value={formData.title}
+                      value={formData.title || ''}
                       onChange={(e) => handleInputChange('title', e.target.value)}
                       className={`w-full px-3 py-2 border rounded-md focus:ring-primary-500 focus:border-primary-500 ${
                         (formData.title?.length || 0) > 0 && (formData.title?.length || 0) < 5
@@ -384,7 +384,7 @@ const EditCoursePage: React.FC = () => {
                       Mô tả ngắn *
                     </label>
                     <textarea
-                      value={formData.shortDescription}
+                      value={formData.shortDescription || ''}
                       onChange={(e) => handleInputChange('shortDescription', e.target.value)}
                       rows={3}
                       className={`w-full px-3 py-2 border rounded-md focus:ring-primary-500 focus:border-primary-500 ${
@@ -419,7 +419,7 @@ const EditCoursePage: React.FC = () => {
                       Mô tả chi tiết *
                     </label>
                     <textarea
-                      value={formData.description}
+                      value={formData.description || ''}
                       onChange={(e) => handleInputChange('description', e.target.value)}
                       rows={6}
                       className={`w-full px-3 py-2 border rounded-md focus:ring-primary-500 focus:border-primary-500 ${
@@ -452,7 +452,7 @@ const EditCoursePage: React.FC = () => {
                       </label>
                       <input
                         type="number"
-                        value={formData.price}
+                        value={formData.price || 0}
                         onChange={(e) => handleInputChange('price', parseFloat(e.target.value) || 0)}
                         className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-primary-500 focus:border-primary-500"
                         placeholder="0.00"
@@ -468,7 +468,7 @@ const EditCoursePage: React.FC = () => {
                       </label>
                       <input
                         type="number"
-                        value={formData.originalPrice}
+                        value={formData.originalPrice || 0}
                         onChange={(e) => handleInputChange('originalPrice', parseFloat(e.target.value) || 0)}
                         className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-primary-500 focus:border-primary-500"
                         placeholder="0.00"
@@ -483,7 +483,7 @@ const EditCoursePage: React.FC = () => {
                       </label>
                       <input
                         type="number"
-                        value={formData.duration}
+                        value={formData.duration || 0}
                         onChange={(e) => handleInputChange('duration', parseFloat(e.target.value) || 0)}
                         className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-primary-500 focus:border-primary-500"
                         placeholder="0.5"
@@ -500,7 +500,7 @@ const EditCoursePage: React.FC = () => {
                       Cấp độ
                     </label>
                     <select
-                      value={formData.level}
+                      value={formData.level || 'beginner'}
                       onChange={(e) => handleInputChange('level', e.target.value)}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-primary-500 focus:border-primary-500"
                     >
@@ -517,7 +517,7 @@ const EditCoursePage: React.FC = () => {
                     </label>
                     <input
                       type="url"
-                      value={formData.thumbnail}
+                      value={formData.thumbnail || ''}
                       onChange={(e) => handleInputChange('thumbnail', e.target.value)}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-primary-500 focus:border-primary-500"
                       placeholder="https://example.com/course-thumbnail.jpg"
@@ -543,7 +543,7 @@ const EditCoursePage: React.FC = () => {
                           value={outcome}
                           onChange={(e) => handleArrayChange('whatYouWillLearn', index, e.target.value)}
                           className={`flex-1 px-3 py-2 border rounded-md focus:ring-primary-500 focus:border-primary-500 ${
-                            outcome.length > 300 ? 'border-red-300' : 'border-gray-300'
+                            (outcome?.length || 0) > 300 ? 'border-red-300' : 'border-gray-300'
                           }`}
                           placeholder="Học viên sẽ học được gì? (tối đa 300 ký tự)"
                           maxLength={300}
@@ -558,9 +558,9 @@ const EditCoursePage: React.FC = () => {
                           </button>
                         )}
                       </div>
-                      {outcome.length > 0 && (
+                      {(outcome?.length || 0) > 0 && (
                         <div className="text-right text-sm text-gray-500">
-                          {outcome.length}/300
+                          {outcome?.length || 0}/300
                         </div>
                       )}
                     </div>
@@ -588,7 +588,7 @@ const EditCoursePage: React.FC = () => {
                           value={requirement}
                           onChange={(e) => handleArrayChange('requirements', index, e.target.value)}
                           className={`flex-1 px-3 py-2 border rounded-md focus:ring-primary-500 focus:border-primary-500 ${
-                            requirement.length > 200 ? 'border-red-300' : 'border-gray-300'
+                            (requirement?.length || 0) > 200 ? 'border-red-300' : 'border-gray-300'
                           }`}
                           placeholder="Học viên cần biết gì? (tối đa 200 ký tự)"
                           maxLength={200}
@@ -603,9 +603,9 @@ const EditCoursePage: React.FC = () => {
                           </button>
                         )}
                       </div>
-                      {requirement.length > 0 && (
+                      {(requirement?.length || 0) > 0 && (
                         <div className="text-right text-sm text-gray-500">
-                          {requirement.length}/200
+                          {requirement?.length || 0}/200
                         </div>
                       )}
                     </div>
@@ -633,7 +633,7 @@ const EditCoursePage: React.FC = () => {
                           value={tag}
                           onChange={(e) => handleArrayChange('tags', index, e.target.value)}
                           className={`flex-1 px-3 py-2 border rounded-md focus:ring-primary-500 focus:border-primary-500 ${
-                            tag.length > 50 ? 'border-red-300' : 'border-gray-300'
+                            (tag?.length || 0) > 50 ? 'border-red-300' : 'border-gray-300'
                           }`}
                           placeholder="Thêm tag (tối đa 50 ký tự)"
                           maxLength={50}
@@ -648,9 +648,9 @@ const EditCoursePage: React.FC = () => {
                           </button>
                         )}
                       </div>
-                      {tag.length > 0 && (
+                      {(tag?.length || 0) > 0 && (
                         <div className="text-right text-sm text-gray-500">
-                          {tag.length}/50
+                          {tag?.length || 0}/50
                         </div>
                       )}
                     </div>

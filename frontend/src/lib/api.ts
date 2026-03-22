@@ -18,7 +18,7 @@ if (typeof window !== 'undefined') {
 
 // Request interceptor to add auth token
 api.interceptors.request.use(
-  (config: any) => {
+  (config : any) => {
     // Get token from localStorage or cookies (cookies are handled automatically by withCredentials)
     if (typeof window !== 'undefined') {
       const token = localStorage.getItem('token');

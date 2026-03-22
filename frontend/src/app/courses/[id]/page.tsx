@@ -164,7 +164,7 @@ const CourseDetailPage: React.FC = () => {
             <ChevronRight className="h-4 w-4" />
             <Link href="/courses" className="hover:text-primary-600">Courses</Link>
             <ChevronRight className="h-4 w-4" />
-            <Link href={`/categories/${course.category._id}`} className="hover:text-primary-600">
+            <Link href={`/categories/${course.category.slug || course.category._id}`} className="hover:text-primary-600">
               {course.category.name}
             </Link>
             <ChevronRight className="h-4 w-4" />

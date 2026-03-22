@@ -118,6 +118,49 @@ router.post('/validate', authenticate, async (req: AuthRequest, res) => {
 
 /**
  * @swagger
+ * /coupons/public:
+ *   get:
+ *     summary: Get active coupons for public display (chatbot)
+ *     tags: [Coupons]
+ *     responses:
+ *       200:
+ *         description: List of active coupons
+ */
+router.get('/public', async (req, res) => {
+  try {
+    const now = new Date();
+
+    const coupons = await Coupon.find({
+      isActive: true,
+      validFrom: { $lte: now },
+      validTo: { $gte: now },
+      $expr: { $lt: ['$usedCount', '$usageLimit'] }
+    })
+    .select('code discountType discountValue minOrderAmount maxDiscount validTo remainingUsage')
+    .sort({ discountValue: -1 })
+    .limit(10);
+
+    // Add virtual field manually since we're using select
+    const couponsWithRemaining = coupons.map(coupon => ({
+      ...coupon.toObject(),
+      remainingUsage: Math.max(0, coupon.usageLimit - coupon.usedCount)
+    }));
+
+    res.json({
+      success: true,
+      data: couponsWithRemaining
+    });
+  } catch (error) {
+    console.error('Error fetching public coupons:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to fetch coupons'
+    });
+  }
+});
+
+/**
+ * @swagger
  * /coupons:
  *   get:
  *     summary: Get all coupons (admin only)

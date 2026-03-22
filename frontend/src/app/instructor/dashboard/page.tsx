@@ -19,6 +19,7 @@ import {
 import InstructorNavbar from '@/components/instructor/InstructorNavbar';
 import { instructorDashboardApi, InstructorStats, InstructorCourse } from '@/services/instructorDashboardApi';
 import { toast } from 'react-hot-toast';
+import { formatNumber } from '@/lib/utils';
 
 const InstructorDashboardPage: React.FC = () => {
   const router = useRouter();
@@ -155,7 +156,7 @@ const InstructorDashboardPage: React.FC = () => {
               <div className="ml-4">
                 <p className="text-sm font-medium text-gray-600">Total Revenue</p>
                 <p className="text-2xl font-bold text-gray-900">
-                  ${stats?.totalRevenue?.toLocaleString() || 0}
+                  ${stats?.totalRevenue ? formatNumber(stats.totalRevenue) : 0}
                 </p>
               </div>
             </div>

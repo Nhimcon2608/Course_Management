@@ -8,6 +8,7 @@ import Navbar from '@/components/layout/Navbar';
 import EmailVerificationBanner from '@/components/EmailVerificationBanner';
 import { dashboardApi, DashboardStats, EnrolledCourse, RecentActivity, RecommendedCourse } from '@/services/dashboardApi';
 import { toast } from 'react-hot-toast';
+import { formatNumber } from '@/lib/utils';
 
 const DashboardPage: React.FC = () => {
   const router = useRouter();
@@ -384,7 +385,7 @@ const DashboardPage: React.FC = () => {
                       </p>
                       <div className="flex items-center justify-between mt-2">
                         <span className="text-sm font-bold text-primary-600">
-                          {course.price.toLocaleString('vi-VN')}đ
+                          {formatNumber(course.price, 'vi-VN')}đ
                         </span>
                         <div className="flex items-center text-xs text-gray-500">
                           <Star className="h-3 w-3 text-yellow-400 mr-1" />
